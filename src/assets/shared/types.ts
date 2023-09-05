@@ -1,7 +1,7 @@
 export type Board = {
-  name: String;
+  title: String;
   columns: BoardColumn[];
 }
 export type BoardColumn = {
-  name: String;
+  title: String;
 }

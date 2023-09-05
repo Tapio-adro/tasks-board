@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { Board } from './components/Board';
-import { Board, BoardColumn } from "./assets/shared/types";
+import { BoardComponent } from './components/BoardComponent';
 
 function App() {
   
 
   return (
     <>
-      <Board></Board>
+      <BoardComponent />
     </>
   );
 }
