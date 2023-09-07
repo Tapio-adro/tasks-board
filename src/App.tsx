@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { BoardComponent } from './components/BoardComponent';
+import BoardComponent from './components/BoardComponent';
 
 function App() {
   

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Board, BoardColumn } from '../assets/shared/types';
-import { getBoardObject } from '../assets/scripts/objectsGenerator';
+import { getDefaultBoard } from '../assets/scripts/objectsGenerator';
 import { styled } from 'styled-components';
 import { rgba } from 'polished';
+import RenamableField from './RenamableField';
 
 const BoardTitle = styled.div`
   width: 100%;
@@ -11,19 +12,37 @@ const BoardTitle = styled.div`
   padding-left: 20px;
   display: flex;
   align-items: center;
-  color: #fff;
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 20px;
+  input, .title {
+    font-weight: bold;
+    font-size: 20px;
+    padding: 4px;
+    border: 2px solid rgba(0, 0, 0, 0);
+  }
+  .title {
+    color: #fff;
+    border: 2px solid rgba(0, 0, 0, 0);
+  }
 `;
 
 
-export function BoardComponent () {
-  const [board, setBoard] = useState<Board>(getBoardObject)
+export default function BoardComponent () {
+  const [board, setBoard] = useState<Board>(getDefaultBoard)
+
+  function setBoardTitle(newTitle: string) {
+    setBoard({
+      ...board,
+      title: newTitle
+    })
+  }
 
   return (
     <>
-      <BoardTitle>{board.title}</BoardTitle>
+      <BoardTitle>
+        <RenamableField
+          fieldValue={board.title}
+          onFieldValueChange={setBoardTitle}
+        />
+      </BoardTitle>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { Board } from '../shared/types';
 
-export function getBoardObject (): Board {
+export function getDefaultBoard (): Board {
   return {
     title: 'Board',
     columns: []
