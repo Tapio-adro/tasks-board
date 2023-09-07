@@ -5,6 +5,9 @@ import { styled } from 'styled-components';
 import { rgba } from 'polished';
 import RenamableField from './RenamableField';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 const BoardTitle = styled.div`
   width: 100%;
   height: 50px;
@@ -23,7 +26,15 @@ const BoardTitle = styled.div`
     border: 2px solid rgba(0, 0, 0, 0);
   }
 `;
-
+const ColumnsContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  height: calc(100vh - 50px);
+  div {
+    flex: 0 0 auto;
+    width: 300px;
+  }
+`;
 
 export default function BoardComponent () {
   const [board, setBoard] = useState<Board>(getDefaultBoard)
@@ -37,12 +48,18 @@ export default function BoardComponent () {
 
   return (
     <>
-      <BoardTitle>
+      <BoardTitle>       
         <RenamableField
           fieldValue={board.title}
           onFieldValueChange={setBoardTitle}
         />
       </BoardTitle>
+      <ColumnsContainer>
+        <div>hi</div>
+        <div>hi</div>
+        <div>hi</div>
+        <div>hi</div>
+      </ColumnsContainer>
     </>
   )
 }
