@@ -1,8 +1,16 @@
-import { Board } from '../shared/types';
+import { BoardColumn } from '../shared/types';
+import { v4 as uuidv4 } from 'uuid';
 
-export function getDefaultBoard (): Board {
+// export function getInitialBoard (): Board {
+//   return {
+//     title: 'Board',
+//     columns: [],
+//     id: uuidv4(),
+//   }
+// }
+export function getInitialBoardColumn (): BoardColumn {
   return {
-    title: 'Board',
-    columns: []
+    title: 'Column',
+    id: uuidv4(),
   }
 }
