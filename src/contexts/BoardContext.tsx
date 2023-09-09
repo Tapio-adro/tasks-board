@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
-import { BoardColumn, BoardColumnAction } from '../assets/shared/types';
+import { BoardColumn, BoardAction } from '../assets/shared/types';
 import { getInitialBoardColumn } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
-const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnAction>>(() => {});
+const BoardColumnsDispatchContext = createContext<Dispatch<BoardAction>>(() => {});
 const intialBoardColumns = [getInitialBoardColumn()]
 
 
@@ -31,24 +31,24 @@ export function useBoardColumns(): BoardColumn[] | null {
   return useContext(BoardColumnsContext);
 }
 
-export function useBoardColumnsDispatch(): ((action: BoardColumnAction) => void) {
+export function useBoardColumnsDispatch(): ((action: BoardAction) => void) {
   return useContext(BoardColumnsDispatchContext);
 }
 
-function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnAction) {
+function boardColumnsReducer(draft: BoardColumn[], action: BoardAction) {
   switch (action.type) {
-    case 'added': {
+    case 'addColumn': {
       const boardColumn = getInitialBoardColumn()
       boardColumn.title = action.title
       draft.push(boardColumn);
       break;
     }
-    case 'renamed': {
+    case 'renameColumn': {
       const index = draft.findIndex((column) => column.id === action.boardColumn.id);
       draft[index] = action.boardColumn;
       break;
     }
-    case 'deleted': {
+    case 'deleteColumn': {
       return draft.filter(boardColumn => boardColumn.id !== action.id);
     }
     default: {

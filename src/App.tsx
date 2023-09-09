@@ -1,7 +1,7 @@
 import styled, { ThemeProvider } from 'styled-components';
 import BoardComponent from './components/BoardComponent';
 import bgImage from './assets/img/bg.jpg';
-import { BoardColumnsProvider } from './contexts/BoardColumnsContext';
+import { BoardColumnsProvider } from './contexts/BoardContext';
 
 const StyledApp = styled.div`
   width: 100vw;

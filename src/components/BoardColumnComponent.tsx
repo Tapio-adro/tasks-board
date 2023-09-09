@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { BoardColumn, BoardColumnAction } from '../assets/shared/types';
-import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
+import { BoardColumn, BoardAction } from '../assets/shared/types';
+import { useBoardColumnsDispatch } from '../contexts/BoardContext';
 import RenamableField from './RenamableField';
 import { Dispatch } from 'react';
 import { XMark } from '../assets/shared/sharedComponents';
@@ -37,7 +37,7 @@ export default function BoardColumnComponent(column: BoardColumn) {
   
   function renameBoardColumn(newTitle: string) {
     dispatch({
-      type: "renamed",
+      type: "renameColumn",
       boardColumn: {
         ...column,
         title: newTitle != '' ? newTitle : column.title
@@ -46,7 +46,7 @@ export default function BoardColumnComponent(column: BoardColumn) {
   }
   function removeBoardColumn(id: string) {
     dispatch({
-      type: 'deleted',
+      type: 'deleteColumn',
       id: id
     })
   }

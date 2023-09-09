@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
+import { useBoardColumnsDispatch } from '../contexts/BoardContext';
 import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -112,7 +112,7 @@ export default function AddColumnButton() {
     }
     
     dispatch({
-      type: 'added',
+      type: 'addColumn',
       title: inputRef.current.value
     })
 

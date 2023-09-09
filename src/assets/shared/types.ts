@@ -8,7 +8,7 @@ export type BoardColumn = {
   id: string;
 }
 
-export type BoardColumnAction = 
-  | { type: 'added', title: string }
-  | { type: 'renamed'; boardColumn: BoardColumn }
-  | { type: 'deleted'; id: string };
+export type BoardAction = 
+  | { type: 'addColumn', title: string }
+  | { type: 'renameColumn'; boardColumn: BoardColumn }
+  | { type: 'deleteColumn'; id: string };
