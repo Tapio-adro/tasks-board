@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { BoardColumn } from '../assets/shared/types';
-import RenamableField from './RenamableField';
+import { BoardColumn, BoardColumnAction } from '../assets/shared/types';
 import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
+import RenamableField from './RenamableField';
+import { Dispatch } from 'react';
 
 
 const StyledBoardColumn = styled.div`
@@ -32,7 +33,7 @@ const BoardColumnTitle = styled.div`
 `;
 
 export default function BoardColumnComponent(props: BoardColumn) {
-  const dispatch = useBoardColumnsDispatch();
+  const dispatch: Dispatch<BoardColumnAction> = useBoardColumnsDispatch();
   
   function handleRenameBoardColumn(newTitle: string) {
     dispatch({

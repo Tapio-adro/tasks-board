@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from 'react';
+import { Dispatch, ReactNode, createContext, useContext } from 'react';
 import { BoardColumn, BoardColumnAction } from '../assets/shared/types';
 import { getInitialBoardColumn } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
@@ -8,9 +8,7 @@ interface Props {
 }
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
-
-const BoardColumnsDispatchContext = createContext<((action: BoardColumnAction) => void) | null>(null);
-
+const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnAction>>(() => {});
 const intialBoardColumns = [getInitialBoardColumn()]
 
 
@@ -33,7 +31,7 @@ export function useBoardColumns(): BoardColumn[] | null {
   return useContext(BoardColumnsContext);
 }
 
-export function useBoardColumnsDispatch(): ((action: BoardColumnAction) => void) | null {
+export function useBoardColumnsDispatch(): ((action: BoardColumnAction) => void) {
   return useContext(BoardColumnsDispatchContext);
 }
 
