@@ -47,6 +47,7 @@ export default function BoardComponent () {
   const [boardTitle, setBoardTitle] = useState<string>('Board');
   const boardColumns = useBoardColumns();
 
+
   useEffect(() => {
     // setBoard({
     //   ...board,
@@ -60,7 +61,7 @@ export default function BoardComponent () {
     // return () => {
     //   board.columns = []
     // }
-  }, [])
+}, [])
 
 
 
@@ -83,11 +84,9 @@ export default function BoardComponent () {
           onFieldValueChange={setBoardTitle}
         />
       </BoardTitle>
-      <BoardColumnsProvider>
-        <ColumnsContainer>
-          {boardColumnsList}
-        </ColumnsContainer>
-      </BoardColumnsProvider>
+      <ColumnsContainer>
+        {boardColumnsList}
+      </ColumnsContainer>
     </>
   )
 }

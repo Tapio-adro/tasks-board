@@ -1,6 +1,7 @@
-import { ReactNode, createContext, useContext, useReducer } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 import { BoardColumn, BoardColumnAction } from '../assets/shared/types';
 import { getInitialBoardColumn } from '../assets/scripts/objectsGenerator';
+import { useImmerReducer } from 'use-immer';
 
 interface Props {
   children?: ReactNode
@@ -11,10 +12,10 @@ const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<((action: BoardColumnAction) => void) | null>(null);
 
 const intialBoardColumns = [getInitialBoardColumn()]
-console.log(intialBoardColumns);
+
 
 export function BoardColumnsProvider({ children }: Props) {
-  const [boardColumns, dispatch] = useReducer(
+  const [boardColumns, dispatch] = useImmerReducer(
     boardColumnsReducer,
     intialBoardColumns
   );
@@ -36,24 +37,19 @@ export function useBoardColumnsDispatch(): ((action: BoardColumnAction) => void)
   return useContext(BoardColumnsDispatchContext);
 }
 
-function boardColumnsReducer(boardColumns: BoardColumn[], action: BoardColumnAction) {
+function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnAction) {
   switch (action.type) {
     case 'added': {
-      return [...boardColumns, 
-        getInitialBoardColumn()
-      ];
+      draft.push(getInitialBoardColumn());
+      break;
     }
     case 'renamed': {
-      return boardColumns.map(boardColumn => {
-        if (boardColumn.id === action.boardColumn.id) {
-          return action.boardColumn;
-        } else {
-          return boardColumn;
-        }
-      });
+      const index = draft.findIndex((column) => column.id === action.boardColumn.id);
+      draft[index] = action.boardColumn;
+      break;
     }
     case 'deleted': {
-      return boardColumns.filter(boardColumn => boardColumn.id !== action.id);
+      return draft.filter(boardColumn => boardColumn.id !== action.id);
     }
     default: {
       throw Error('Unknown action: ' + (action as any).type);
