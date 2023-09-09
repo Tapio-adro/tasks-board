@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { XMark } from '../assets/shared/sharedComponents';
 
 
 interface ButtonProps {
@@ -139,9 +140,7 @@ export default function AddColumnButton() {
       <Input ref={inputRef} type="text" placeholder='Column title' />
       <ButtonsContainer>
         <ConfirmButton onClick={confirmAddingColumn}>Add column</ConfirmButton>
-        <CancelButton onClick={cancelAddingColumn}>
-          <FontAwesomeIcon icon={faXmark} />
-        </CancelButton>
+        <XMark onClick={cancelAddingColumn} />
       </ButtonsContainer>
     </>
   ) : null

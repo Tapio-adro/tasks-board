@@ -3,6 +3,7 @@ import { BoardColumn, BoardColumnAction } from '../assets/shared/types';
 import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import RenamableField from './RenamableField';
 import { Dispatch } from 'react';
+import { XMark } from '../assets/shared/sharedComponents';
 
 
 const StyledBoardColumn = styled.div`
@@ -16,14 +17,14 @@ const BoardColumnTitle = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding-left: 20px;
+  padding-right: 15px;
   font-weight: 600;
   color: #172b4d;
   input, .title {
     font-weight: bold;
     font-size: 14px;
     padding: 4px;
-
     flex: 1;
   }
   >div:not(.title) {
@@ -31,16 +32,22 @@ const BoardColumnTitle = styled.div`
   }
 `;
 
-export default function BoardColumnComponent(props: BoardColumn) {
+export default function BoardColumnComponent(column: BoardColumn) {
   const dispatch = useBoardColumnsDispatch();
   
-  function handleRenameBoardColumn(newTitle: string) {
+  function renameBoardColumn(newTitle: string) {
     dispatch({
       type: "renamed",
       boardColumn: {
-        ...props,
-        title: newTitle != '' ? newTitle : props.title
+        ...column,
+        title: newTitle != '' ? newTitle : column.title
       }
+    })
+  }
+  function removeBoardColumn(id: string) {
+    dispatch({
+      type: 'deleted',
+      id: id
     })
   }
   
@@ -49,11 +56,11 @@ export default function BoardColumnComponent(props: BoardColumn) {
       <StyledBoardColumn>
         <BoardColumnTitle>
           <RenamableField
-            fieldValue={props.title}
-            onFieldValueChange={handleRenameBoardColumn}
+            fieldValue={column.title}
+            onFieldValueChange={renameBoardColumn}
           />
+        <XMark onClick={() => removeBoardColumn(column.id)}/>
         </BoardColumnTitle>
-        
       </StyledBoardColumn>
     </>
   )

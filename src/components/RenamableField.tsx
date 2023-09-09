@@ -24,6 +24,7 @@ export default function RenamableField({
   onFieldValueChange: Function
 }){
   const [showInput, setShowInput] = useState(false);
+  const [localFieldValue, setLocalFieldValue] = useState<string>(fieldValue);
   
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,18 +34,33 @@ export default function RenamableField({
     }
   }, [showInput])
 
-  useHotkeys('enter', () => setShowInput(false), {enableOnFormTags: true})
-  useHotkeys('esc', () => setShowInput(false), {enableOnFormTags: true})
+  useHotkeys('enter', checkChange, {enableOnFormTags: true})
+  useHotkeys('esc', CancelChange, {enableOnFormTags: true})
 
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    onFieldValueChange(event.target.value)
+  function handleLocalChange(event: ChangeEvent<HTMLInputElement>) {
+    setLocalFieldValue(event.target.value)
+  }
+  function ConfirmChange() {
+    onFieldValueChange(localFieldValue)
+  }
+  function checkChange() {
+    if (localFieldValue != '') {
+      ConfirmChange()
+      setShowInput(false)
+    } else {
+      CancelChange()
+    }
+  }
+  function CancelChange() {
+    setLocalFieldValue(fieldValue)
+    setShowInput(false)
   }
   
   if (showInput) {
     return (
-      <OutsideClickHandler onOutsideClick={() => setShowInput(false)}>
-        <StyledInput ref={inputRef} type="text" value={fieldValue} onChange={handleInputChange}/>
+      <OutsideClickHandler onOutsideClick={checkChange}>
+        <StyledInput ref={inputRef} type="text" value={localFieldValue} onChange={handleLocalChange}/>
       </OutsideClickHandler>
     )
   } else {
