@@ -1,5 +1,15 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import styled from 'styled-components';
+
+const TextField = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+`;
+const StyledInput = styled.input`
+  width: 100%;
+`;
 
 export default function RenamableField({
   fieldValue,
@@ -24,13 +34,15 @@ export default function RenamableField({
   
   if (showInput) {
     return (
-      <>
       <OutsideClickHandler onOutsideClick={() => setShowInput(false)}>
-        <input ref={inputRef} type="text" value={fieldValue} onChange={handleInputChange}/>
+        <StyledInput ref={inputRef} type="text" value={fieldValue} onChange={handleInputChange}/>
       </OutsideClickHandler>
-      </>
     )
   } else {
-    return (<div className='title' onClick={() => setShowInput(true)}>{fieldValue}</div>)
+    return (
+      <TextField className='title' onClick={() => setShowInput(true)}>
+        {fieldValue}
+      </TextField>
+    )
   }
 }

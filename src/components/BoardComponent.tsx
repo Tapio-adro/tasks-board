@@ -13,20 +13,16 @@ import { BoardColumnsProvider, useBoardColumns, useBoardColumnsDispatch } from '
 
 const BoardTitle = styled.div`
   backdrop-filter: blur(8px);
-  width: 100%;
   height: 50px;
   background-color: ${() => rgba('grey', 0.5)};
   padding-left: 20px;
   display: flex;
   align-items: center;
+  color: #fff;
   input, .title {
     font-weight: bold;
     font-size: 20px;
     padding: 4px;
-    border: 2px solid rgba(0, 0, 0, 0);
-  }
-  .title {
-    color: #fff;
     border: 2px solid rgba(0, 0, 0, 0);
   }
 `;
@@ -37,8 +33,8 @@ const ColumnsContainer = styled.div`
   padding: 10px;
   overflow-x: auto;
   height: calc(100vh - 50px);
-  div {
-    flex: 0 0 auto;
+  >div {
+    /* flex: 0 0 auto; */
     width: 300px;
   }
 `;
