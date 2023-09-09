@@ -33,9 +33,24 @@ const ColumnsContainer = styled.div`
   padding: 10px;
   overflow-x: auto;
   height: calc(100vh - 50px);
-  >div {
-    /* flex: 0 0 auto; */
+  >div, >button {
+    flex: 0 0 auto;
     width: 300px;
+    border-radius: 12px;
+  }
+`;
+const StyledAddColumn = styled.button`
+  background-color: #96969639;
+  height: 50px;
+  color: #fff;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding-left: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: #96969616;
   }
 `;
 
@@ -82,7 +97,25 @@ export default function BoardComponent () {
       </BoardTitle>
       <ColumnsContainer>
         {boardColumnsList}
+        <AddColumn />
       </ColumnsContainer>
     </>
+  )
+}
+
+function AddColumn() {
+  const dispatch = useBoardColumnsDispatch();
+
+  function addColumn() {
+    dispatch({
+      type: 'added'
+    })
+  }
+
+  return (
+    <StyledAddColumn onClick={addColumn}>
+      <FontAwesomeIcon icon={faPlus}/>&nbsp;
+      Add a column
+    </StyledAddColumn>
   )
 }

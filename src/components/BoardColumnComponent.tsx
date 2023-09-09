@@ -9,7 +9,6 @@ const StyledBoardColumn = styled.div`
   width: 100%;
   background-color: #f1f2f4;
   /* padding: 8px; */
-  border-radius: 12px;
   box-shadow: var(--ds-shadow-raised,0 1px 1px #091e4240,0 0 1px #091e424f);
 `;
 const BoardColumnTitle = styled.div`
@@ -33,7 +32,7 @@ const BoardColumnTitle = styled.div`
 `;
 
 export default function BoardColumnComponent(props: BoardColumn) {
-  const dispatch: Dispatch<BoardColumnAction> = useBoardColumnsDispatch();
+  const dispatch = useBoardColumnsDispatch();
   
   function handleRenameBoardColumn(newTitle: string) {
     dispatch({

@@ -9,7 +9,7 @@ interface Props {
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnAction>>(() => {});
-const intialBoardColumns = [getInitialBoardColumn()]
+const intialBoardColumns = [getInitialBoardColumn(), getInitialBoardColumn(), getInitialBoardColumn()]
 
 
 export function BoardColumnsProvider({ children }: Props) {
