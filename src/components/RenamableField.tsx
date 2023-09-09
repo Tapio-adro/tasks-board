@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 
@@ -6,6 +7,10 @@ const TextField = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+  border-color: rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  border-width: 2px;
+  border-style: solid;
 `;
 const StyledInput = styled.input`
   width: 100%;
@@ -27,6 +32,10 @@ export default function RenamableField({
       inputRef.current.select();
     }
   }, [showInput])
+
+  useHotkeys('enter', () => setShowInput(false), {enableOnFormTags: true})
+  useHotkeys('esc', () => setShowInput(false), {enableOnFormTags: true})
+
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     onFieldValueChange(event.target.value)

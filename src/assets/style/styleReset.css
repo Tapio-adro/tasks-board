@@ -3,6 +3,7 @@
   margin: 0;
 }
 button {
+  appearance: none;
   background: none repeat scroll 0 0 transparent;
   border: medium none;
   border-spacing: 0;
@@ -15,6 +16,12 @@ button {
   text-align: left;
   text-decoration: none;
   text-indent: 0;
+}
+textarea:focus, input:focus {
+  outline: none;
+}
+button {
+  cursor: pointer;
 }
 /* input {
   all: unset;

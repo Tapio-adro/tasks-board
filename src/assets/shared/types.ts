@@ -9,6 +9,6 @@ export type BoardColumn = {
 }
 
 export type BoardColumnAction = 
-  | { type: 'added' }
+  | { type: 'added', title: string }
   | { type: 'renamed'; boardColumn: BoardColumn }
   | { type: 'deleted'; id: string };

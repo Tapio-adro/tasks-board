@@ -9,7 +9,7 @@ interface Props {
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnAction>>(() => {});
-const intialBoardColumns = [getInitialBoardColumn(), getInitialBoardColumn(), getInitialBoardColumn()]
+const intialBoardColumns = [getInitialBoardColumn()]
 
 
 export function BoardColumnsProvider({ children }: Props) {
@@ -38,7 +38,9 @@ export function useBoardColumnsDispatch(): ((action: BoardColumnAction) => void)
 function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnAction) {
   switch (action.type) {
     case 'added': {
-      draft.push(getInitialBoardColumn());
+      const boardColumn = getInitialBoardColumn()
+      boardColumn.title = action.title
+      draft.push(boardColumn);
       break;
     }
     case 'renamed': {

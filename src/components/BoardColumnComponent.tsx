@@ -23,7 +23,7 @@ const BoardColumnTitle = styled.div`
     font-weight: bold;
     font-size: 14px;
     padding: 4px;
-    border: 2px solid rgba(0, 0, 0, 0);
+
     flex: 1;
   }
   >div:not(.title) {
@@ -39,7 +39,7 @@ export default function BoardColumnComponent(props: BoardColumn) {
       type: "renamed",
       boardColumn: {
         ...props,
-        title: newTitle
+        title: newTitle != '' ? newTitle : props.title
       }
     })
   }
