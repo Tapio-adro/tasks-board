@@ -1,6 +1,6 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
 import { BoardColumn, BoardAction } from '../assets/shared/types';
-import { getInitialBoardColumn } from '../assets/scripts/objectsGenerator';
+import { getInitialBoardColumn, getInitialCard } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
 interface Props {
@@ -44,15 +44,30 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardAction) {
       break;
     }
     case 'renameColumn': {
-      const index = draft.findIndex((column) => column.id === action.boardColumn.id);
-      draft[index] = action.boardColumn;
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      draft[columnIndex] = action.boardColumn;
       break;
     }
     case 'deleteColumn': {
       return draft.filter(boardColumn => boardColumn.id !== action.id);
     }
+    case 'addCard': {
+      const column = action.boardColumn
+      const card = getInitialCard()
+      card.title = action.title
+      const columnIndex = getColumnIndexById(draft, column.id)
+      draft[columnIndex].cards.push(card);
+      break;
+    }
     default: {
       throw Error('Unknown action: ' + (action as any).type);
     }
   }
+}
+
+function getColumnIndexById(draft: BoardColumn[], id: string): number {
+  return draft.findIndex((column) => column.id === id);
+}
+function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
+  return draft[getColumnIndexById(draft, id)]
 }

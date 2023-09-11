@@ -4,6 +4,8 @@ import { useBoardColumnsDispatch } from '../contexts/BoardContext';
 import RenamableField from './RenamableField';
 import { Dispatch } from 'react';
 import { XMark } from '../assets/shared/sharedComponents';
+import CardComponent from './CardComponent';
+import AddBoardElementButton from './AddBoardElementButton';
 
 
 const StyledBoardColumn = styled.div`
@@ -17,9 +19,7 @@ const BoardColumnTitle = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
-  padding-left: 20px;
-  padding-right: 15px;
-  font-weight: 600;
+  padding: 0 15px;
   color: #172b4d;
   input, .title {
     font-weight: bold;
@@ -30,6 +30,12 @@ const BoardColumnTitle = styled.div`
   >div:not(.title) {
     flex: 1;
   }
+`;
+const CardsContainer = styled.div`
+  padding: 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
 `;
 
 export default function BoardColumnComponent(column: BoardColumn) {
@@ -50,6 +56,10 @@ export default function BoardColumnComponent(column: BoardColumn) {
       id: id
     })
   }
+
+  const cardsList = column.cards?.map((card) => {
+    return (<CardComponent key={card.id} {...{column, card}} />)
+  });
   
   return (
     <>
@@ -59,8 +69,12 @@ export default function BoardColumnComponent(column: BoardColumn) {
             fieldValue={column.title}
             onFieldValueChange={renameBoardColumn}
           />
-        <XMark onClick={() => removeBoardColumn(column.id)}/>
+          <XMark onClick={() => removeBoardColumn(column.id)}/>
         </BoardColumnTitle>
+        <CardsContainer>
+          {cardsList}
+          <AddBoardElementButton elementType='card' boardColumn={column} />
+        </CardsContainer>
       </StyledBoardColumn>
     </>
   )

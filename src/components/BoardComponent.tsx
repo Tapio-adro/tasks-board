@@ -2,7 +2,7 @@ import { rgba } from 'polished';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useBoardColumns } from '../contexts/BoardContext';
-import AddColumnButton from './AddColumnButton';
+import AddBoardElementButton from './AddBoardElementButton';
 import BoardColumnComponent from './BoardColumnComponent';
 import RenamableField from './RenamableField';
 
@@ -53,7 +53,7 @@ export default function BoardComponent () {
       </BoardTitle>
       <ColumnsContainer>
         {boardColumnsList}
-        <AddColumnButton />
+        <AddBoardElementButton elementType='boardColumn' />
       </ColumnsContainer>
     </>
   )

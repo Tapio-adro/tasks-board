@@ -6,9 +6,18 @@ export type Board = {
 export type BoardColumn = {
   title: string;
   id: string;
+  cards: Card[];
+}
+export type Card = {
+  title: string;
+  id: string;
+  // parts: 
 }
 
-export type BoardAction = 
-  | { type: 'addColumn', title: string }
+export type BoardAction =
+  | { type: 'addColumn'; title: string }
   | { type: 'renameColumn'; boardColumn: BoardColumn }
-  | { type: 'deleteColumn'; id: string };
+  | { type: 'deleteColumn'; id: string }
+  | { type: 'addCard'; boardColumn: BoardColumn; title: string };
+
+export type BoardElementType = 'boardColumn' | 'card'
