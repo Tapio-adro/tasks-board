@@ -10,16 +10,16 @@ import AddBoardElementButton from './AddBoardElementButton';
 
 const StyledBoardColumn = styled.div`
   width: 100%;
-  background-color: #f1f2f4;
+  background-color: ${(props) => props.theme.colors.bgColor};
   /* padding: 8px; */
-  box-shadow: var(--ds-shadow-raised,0 1px 1px #091e4240,0 0 1px #091e424f);
+  box-shadow: ${(props) => props.theme.boxShadow};
 `;
 const BoardColumnTitle = styled.div`
   width: 100%;
   display: flex;
   /* align-items: center; */
   padding: 11px 15px;
-  color: #172b4d;
+  color: ${(props) => props.theme.colors.titleText};
   input, .title {
     font-weight: bold;
     font-size: 14px;

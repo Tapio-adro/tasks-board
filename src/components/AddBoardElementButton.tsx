@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useBoardColumnsDispatch } from '../contexts/BoardContext';
 import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
@@ -29,13 +29,14 @@ const AddElementWrapper = styled.div<AddElementWrapperProps>`
   padding: 8px;
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 12px;
   &:hover {
     background-color: #96969616;
   }
   ${props => {
     if (props.$elementType == 'card') {
       return css`
+        border-radius: 8px;
         padding: 0 8px;
         height: 30px;
         background-color: transparent;
@@ -54,7 +55,7 @@ const AddElementWrapper = styled.div<AddElementWrapperProps>`
         padding: 8px;
         height: 84px;
         background-color: white;
-        box-shadow: var(--ds-shadow-raised,0 1px 1px #091e4240,0 0 1px #091e424f);
+        box-shadow: ${(props) => props.theme.boxShadow};
         &:hover {
           background-color: white;
         }
@@ -62,10 +63,11 @@ const AddElementWrapper = styled.div<AddElementWrapperProps>`
     } else {
       return css`
         height: 84px;
-        background-color: #f1f2f4;
+        background-color: ${(props) => props.theme.colors.bgColor};
         cursor: auto;
+        box-shadow: ${(props) => props.theme.boxShadow};
         &:hover {
-          background-color: #f1f2f4;
+          background-color: ${(props) => props.theme.colors.bgColor};
         }
       `
     }
@@ -92,7 +94,7 @@ const Input = styled.input<InputProps>`
   font-weight: bold;
   font-size: 14px;
   padding: 4px;
-  color: #172b4d;
+  color: ${(props) => props.theme.colors.titleText};
   width: 100%;
   ${props => props.$elementType == 'card' && css`
     font-weight: normal;

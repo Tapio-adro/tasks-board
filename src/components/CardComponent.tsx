@@ -8,7 +8,7 @@ const StyledCard = styled.div`
   padding-left: 16px;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: var(--ds-shadow-raised,0 1px 1px #091e4240,0 0 1px #091e424f);
+  box-shadow: ${(props) => props.theme.boxShadow};
   min-height: 36px;
   display: flex;
   align-items: center;
