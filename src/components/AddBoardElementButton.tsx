@@ -11,10 +11,13 @@ import { BoardColumn, BoardElementType } from '../assets/shared/types';
 
 interface AddElementWrapperProps {
   readonly $isActive: boolean;
-  readonly $elementType: string;
+  readonly $elementType: BoardElementType;
 }
 interface StyledAddBoardElementButtonProps {
-  readonly $elementType: string;
+  readonly $elementType: BoardElementType;
+}
+interface InputProps {
+  readonly $elementType: BoardElementType;
 }
 
 const AddElementWrapper = styled.div<AddElementWrapperProps>`
@@ -80,16 +83,20 @@ const StyledAddBoardElementButton = styled.button<StyledAddBoardElementButtonPro
   cursor: pointer;
   flex-grow: 1;
   ${props => props.$elementType == 'card' && css`
+    padding-top: 3px;
     height: 30px;
     color: #44546f;
   `};
 `;
-const Input = styled.input`
+const Input = styled.input<InputProps>`
   font-weight: bold;
   font-size: 14px;
   padding: 4px;
   color: #172b4d;
   width: 100%;
+  ${props => props.$elementType == 'card' && css`
+    font-weight: normal;
+  `};
 `;
 const ButtonsContainer = styled.div`
   display: flex;
@@ -192,13 +199,20 @@ export default function AddBoardElementButton({elementType, boardColumn}: AddBoa
   )
   const addElementMenu = isActive ? (
     <>
-      <Input ref={inputRef} type="text" placeholder={strings.elementTitle} />
+      <Input
+        ref={inputRef}
+        type="text"
+        placeholder={strings.elementTitle}
+        $elementType={elementType}
+      />
       <ButtonsContainer>
-        <ConfirmButton onClick={confirmAddingElement}>{strings.buttonTitle}</ConfirmButton>
+        <ConfirmButton onClick={confirmAddingElement}>
+          {strings.buttonTitle}
+        </ConfirmButton>
         <XMark onClick={cancelAddingElement} />
       </ButtonsContainer>
     </>
-  ) : null
+  ) : null;
 
   return (
     <OutsideClickHandler onOutsideClick={() => cancelAddingElement()}>

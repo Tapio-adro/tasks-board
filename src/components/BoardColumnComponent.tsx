@@ -16,10 +16,9 @@ const StyledBoardColumn = styled.div`
 `;
 const BoardColumnTitle = styled.div`
   width: 100%;
-  height: 50px;
   display: flex;
-  align-items: center;
-  padding: 0 15px;
+  /* align-items: center; */
+  padding: 11px 15px;
   color: #172b4d;
   input, .title {
     font-weight: bold;
