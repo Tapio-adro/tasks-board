@@ -16,8 +16,9 @@ export type Card = {
 
 export type BoardAction =
   | { type: 'addColumn'; title: string }
-  | { type: 'renameColumn'; boardColumn: BoardColumn }
+  | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
   | { type: 'deleteColumn'; id: string }
-  | { type: 'addCard'; boardColumn: BoardColumn; title: string };
+  | { type: 'addCard'; boardColumn: BoardColumn; title: string }
+  | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
 
 export type BoardElementType = 'boardColumn' | 'card'

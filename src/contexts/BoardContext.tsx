@@ -45,7 +45,8 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardAction) {
     }
     case 'renameColumn': {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
-      draft[columnIndex] = action.boardColumn;
+      let newTitle = action.newTitle != '' ? action.newTitle : action.boardColumn.title;
+      draft[columnIndex].title = newTitle;
       break;
     }
     case 'deleteColumn': {
@@ -59,6 +60,13 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardAction) {
       draft[columnIndex].cards.push(card);
       break;
     }
+    case 'renameCard': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      let newTitle = action.newTitle != '' ? action.newTitle : action.card.title;
+      draft[columnIndex].cards[cardIndex].title = newTitle;
+      break;
+    }
     default: {
       throw Error('Unknown action: ' + (action as any).type);
     }
@@ -67,6 +75,9 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardAction) {
 
 function getColumnIndexById(draft: BoardColumn[], id: string): number {
   return draft.findIndex((column) => column.id === id);
+}
+function getCardIndexById(column: BoardColumn, id: string): number {
+  return column.cards.findIndex((card) => card.id === id);
 }
 function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
   return draft[getColumnIndexById(draft, id)]

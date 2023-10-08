@@ -87,7 +87,7 @@ const StyledAddBoardElementButton = styled.button<StyledAddBoardElementButtonPro
   ${props => props.$elementType == 'card' && css`
     padding-top: 3px;
     height: 30px;
-    color: #44546f;
+    color: ${(props) => props.theme.colors.buttonGrayText};
   `};
 `;
 const Input = styled.input<InputProps>`

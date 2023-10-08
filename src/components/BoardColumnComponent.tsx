@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { BoardColumn, BoardAction } from '../assets/shared/types';
 import { useBoardColumnsDispatch } from '../contexts/BoardContext';
 import RenamableField from './RenamableField';
-import { Dispatch } from 'react';
 import { XMark } from '../assets/shared/sharedComponents';
 import CardComponent from './CardComponent';
 import AddBoardElementButton from './AddBoardElementButton';
@@ -17,8 +16,8 @@ const StyledBoardColumn = styled.div`
 const BoardColumnTitle = styled.div`
   width: 100%;
   display: flex;
-  /* align-items: center; */
-  padding: 11px 15px;
+  align-items: center;
+  padding: 8px 15px;
   color: ${(props) => props.theme.colors.titleText};
   input, .title {
     font-weight: bold;
@@ -43,10 +42,8 @@ export default function BoardColumnComponent(column: BoardColumn) {
   function renameBoardColumn(newTitle: string) {
     dispatch({
       type: "renameColumn",
-      boardColumn: {
-        ...column,
-        title: newTitle != '' ? newTitle : column.title
-      }
+      boardColumn: column,
+      newTitle
     })
   }
   function removeBoardColumn(id: string) {

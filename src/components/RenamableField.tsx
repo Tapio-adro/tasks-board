@@ -1,9 +1,15 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { faN } from '@fortawesome/free-solid-svg-icons';
+import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import OutsideClickHandler from 'react-outside-click-handler';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const TextField = styled.div`
+
+interface TextFieldProps {
+  readonly $showOnClick: boolean;
+}
+
+const TextField = styled.div<TextFieldProps>`
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
@@ -11,22 +17,43 @@ const TextField = styled.div`
   border-radius: 4px;
   border-width: 2px;
   border-style: solid;
+  ${props => !props.$showOnClick && css`
+    cursor: auto;
+  `};
 `;
 const StyledInput = styled.input`
   width: 100%;
 `;
 
-export default function RenamableField({
-  fieldValue,
-  onFieldValueChange,
-}: {
+export type RenamableFieldHandle = {
+  toggleTextInput: () => void;
+  toggleOutsideClick: (shouldDisable: boolean) => void;
+};
+type RenamableFieldProps = {
   fieldValue: string;
-  onFieldValueChange: Function
-}){
+  onFieldValueChange: Function;
+  showOnClick?: boolean;
+};
+
+const RenamableField = forwardRef<RenamableFieldHandle, RenamableFieldProps>((
+    {fieldValue, onFieldValueChange, showOnClick = true}, ref
+  ) => {
   const [showInput, setShowInput] = useState(false);
+  const [outsideClickEnabled, setOutsideClickEnabled] = useState(true);
   const [localFieldValue, setLocalFieldValue] = useState<string>(fieldValue);
   
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    toggleTextInput() {
+      if (!showInput) {
+        setShowInput(true);
+      } else {
+        checkChange();
+      }
+    },
+    toggleOutsideClick
+  }));
 
   useEffect(() => {
     if (showInput && inputRef.current) {
@@ -56,18 +83,36 @@ export default function RenamableField({
     setLocalFieldValue(fieldValue)
     setShowInput(false)
   }
+  function showTextInput() {
+    if (showOnClick) {
+      setShowInput(true)
+    }
+  }
+  function toggleOutsideClick(shouldDisable: boolean) {
+    if (showOnClick) return;
+
+    setOutsideClickEnabled(!shouldDisable) 
+  }
   
   if (showInput) {
     return (
-      <OutsideClickHandler onOutsideClick={checkChange}>
+      <OutsideClickHandler 
+        onOutsideClick={checkChange}
+        disabled={!outsideClickEnabled}
+      >
         <StyledInput ref={inputRef} type="text" value={localFieldValue} onChange={handleLocalChange}/>
       </OutsideClickHandler>
     )
   } else {
     return (
-      <TextField className='title' onClick={() => setShowInput(true)}>
+      <TextField
+        $showOnClick={showOnClick}
+        className="title"
+        onClick={showTextInput}
+      >
         {fieldValue}
       </TextField>
-    )
+    );
   }
-}
+})
+export default RenamableField

@@ -8,11 +8,11 @@ const StyledXMark = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #44546F;
+  color: ${(props) => props.theme.colors.buttonGrayText};
   margin-left: 4px;
   border-radius: 4px;
   &:hover {
-    background-color: #8d8d8d28;
+    background-color: ${(props) => props.theme.colors.buttonGrayHoverBg};
   }
   svg {
     font-weight: normal;
