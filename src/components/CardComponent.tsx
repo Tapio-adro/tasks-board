@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import RenamableField, { RenamableFieldHandle } from './RenamableField';
 import { useBoardColumnsDispatch } from '../contexts/BoardContext';
 import { useRef } from 'react';
-
+import { useAppearanceEditor } from '../contexts/AppearanceEditorContext';
 
 const StyledCard = styled.div`
   width: 100%;
@@ -15,6 +15,10 @@ const StyledCard = styled.div`
   border-radius: 8px;
   box-shadow: ${(props) => props.theme.boxShadow};
   min-height: 36px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 const CardTitle = styled.div`
   color: ${(props) => props.theme.colors.titleText};
@@ -51,6 +55,7 @@ interface CardComponentProps {
   card: Card;
 }
 export default function CardComponent({column, card}: CardComponentProps) {
+  const {openAppearanceEditor} = useAppearanceEditor();
   const dispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   
@@ -65,7 +70,9 @@ export default function CardComponent({column, card}: CardComponentProps) {
 
   return (
     <>
-      <StyledCard>
+      <StyledCard
+        onClick={() => openAppearanceEditor()}
+      >
         <CardTitle>
           <RenamableField
             ref={renamableFieldRef}

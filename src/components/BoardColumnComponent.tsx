@@ -12,6 +12,7 @@ const StyledBoardColumn = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
   /* padding: 8px; */
   box-shadow: ${(props) => props.theme.boxShadow};
+  cursor: pointer;
 `;
 const BoardColumnTitle = styled.div`
   width: 100%;

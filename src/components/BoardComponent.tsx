@@ -5,6 +5,8 @@ import { useBoardColumns } from '../contexts/BoardContext';
 import AddBoardElementButton from './AddBoardElementButton';
 import BoardColumnComponent from './BoardColumnComponent';
 import RenamableField from './RenamableField';
+import Modal from './Modal';
+import AppearanceEditor from './AppearanceEditor';
 
 const BoardTitle = styled.div`
   backdrop-filter: blur(8px);

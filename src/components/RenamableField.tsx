@@ -1,4 +1,3 @@
-import { faN } from '@fortawesome/free-solid-svg-icons';
 import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -18,7 +17,7 @@ const TextField = styled.div<TextFieldProps>`
   border-width: 2px;
   border-style: solid;
   ${props => !props.$showOnClick && css`
-    cursor: auto;
+    /* cursor: auto; */
   `};
 `;
 const StyledInput = styled.input`
