@@ -27,13 +27,13 @@ const ModalContent = styled.div`
 
 interface ModalProps {
   children: ReactNode;
+  isOpen: boolean;
+  onClose: Function;
 }
 
-const Modal: React.FC<ModalProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(true);
-
+const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
   return (
-    <Background $isOpen={isOpen} onClick={() => setIsOpen(false)}>
+    <Background $isOpen={isOpen} onClick={() => onClose()}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         {children}
       </ModalContent>

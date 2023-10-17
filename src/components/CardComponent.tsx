@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { BoardColumn, Card } from '../assets/shared/types';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faN, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import RenamableField, { RenamableFieldHandle } from './RenamableField';
 import { useBoardColumnsDispatch } from '../contexts/BoardContext';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAppearanceEditor } from '../contexts/AppearanceEditorContext';
 
 const StyledCard = styled.div`
@@ -56,22 +56,34 @@ interface CardComponentProps {
 }
 export default function CardComponent({column, card}: CardComponentProps) {
   const {openAppearanceEditor} = useAppearanceEditor();
-  const dispatch = useBoardColumnsDispatch();
+  const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
+
+  useEffect(() => {
+    // openAppearanceEditor({card, column});
+  }, [])
   
   function renameCard(newTitle: string) {
-    dispatch({
+    boardColumnsDispatch({
       type: "renameCard",
       boardColumn: column,
       card,
       newTitle
     })
   }
+  function handleCardContextMenu(event: React.MouseEvent) {
+    event.preventDefault();
+    openAppearanceEditor({card, column});
+  }
+  function handleTitleButtonClick(event: React.MouseEvent) {
+    event.stopPropagation();
+    renamableFieldRef.current?.toggleTextInput();
+  }
 
   return (
     <>
       <StyledCard
-        onClick={() => openAppearanceEditor()}
+        onContextMenu={handleCardContextMenu}
       >
         <CardTitle>
           <RenamableField
@@ -81,7 +93,7 @@ export default function CardComponent({column, card}: CardComponentProps) {
             showOnClick={false}
           />
           <EditTitleButton 
-            onClick={() => renamableFieldRef.current?.toggleTextInput()}
+            onClick={handleTitleButtonClick}
             onMouseOver={() => renamableFieldRef.current?.toggleOutsideClick(true)}
             onMouseOut={() => renamableFieldRef.current?.toggleOutsideClick(false)}
           >

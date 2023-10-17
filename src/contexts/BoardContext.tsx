@@ -9,13 +9,15 @@ interface Props {
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<Dispatch<BoardAction>>(() => {});
-const intialBoardColumns = [getInitialBoardColumn()]
+const initialBoardColumn = getInitialBoardColumn();
+initialBoardColumn.cards.push(getInitialCard());
+const initialBoardColumns = [initialBoardColumn];
 
 
 export function BoardColumnsProvider({ children }: Props) {
   const [boardColumns, dispatch] = useImmerReducer(
     boardColumnsReducer,
-    intialBoardColumns
+    initialBoardColumns
   );
 
   return (

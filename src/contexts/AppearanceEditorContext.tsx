@@ -1,8 +1,13 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 import AppearanceEditor, { AppearanceEditorProps } from '../components/AppearanceEditor';
+import { BoardColumn, Card } from '../assets/shared/types';
 
+interface AppearanceEditorPassedProps {
+  column: BoardColumn;
+  card: Card;
+}
 interface AppearanceEditorContextType {
-  openAppearanceEditor: (props?: AppearanceEditorProps) => void;
+  openAppearanceEditor: (props: AppearanceEditorPassedProps) => void;
 }
 
 const AppearanceEditorContext = createContext<AppearanceEditorContextType | undefined>(undefined);
@@ -16,23 +21,22 @@ export function useAppearanceEditor() {
 }
 
 export function AppearanceEditorProvider({ children }: { children: ReactNode }) {
-  const [modalProps, setModalProps] = useState<AppearanceEditorProps | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [modalProps, setModalProps] = useState<AppearanceEditorPassedProps | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  function openAppearanceEditor(props?: AppearanceEditorProps) {
-    if (!props) return;
+  function openAppearanceEditor(props: AppearanceEditorPassedProps) {
     setModalProps(props);
-    setShowModal(true);
+    setIsOpen(true);
   }
   function closeModal() {
-    setShowModal(false);
+    setIsOpen(false);
   }
   
 
   return (
     <AppearanceEditorContext.Provider value={{ openAppearanceEditor }}>
       {children}
-      {modalProps && <AppearanceEditor {...modalProps} showModal={showModal} onClose={closeModal} />}
+      {modalProps && <AppearanceEditor {...modalProps} isOpen={isOpen} onClose={closeModal} />}
     </AppearanceEditorContext.Provider>
   );
 }
