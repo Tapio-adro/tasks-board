@@ -59,11 +59,9 @@ export default function CardComponent({column, card}: CardComponentProps) {
   const {openAppearanceEditor} = useAppearanceEditor();
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
-  const boardData = useBoardData();
 
   useEffect(() => {
-    // openAppearanceEditor({card, column});
-    console.log(boardData?.backgroundColors);
+    openAppearanceEditor({card, column});
   }, [])
   
   function renameCard(newTitle: string) {
