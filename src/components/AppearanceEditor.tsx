@@ -3,7 +3,7 @@ import Modal from './Modal';
 import styled from 'styled-components';
 import { BoardColumn, Card } from '../assets/shared/types';
 import RenamableField from './RenamableField';
-import { useBoardColumnsDispatch } from '../contexts/BoardContext';
+import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import { XMark } from '../assets/shared/sharedComponents';
 
 const StyledEditor = styled.div`

@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
-import { BoardColumn, BoardAction } from '../assets/shared/types';
+import { BoardColumn, BoardColumnsAction } from '../assets/shared/types';
 import { getInitialBoardColumn, getInitialCard } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
-const BoardColumnsDispatchContext = createContext<Dispatch<BoardAction>>(() => {});
+const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnsAction>>(() => {});
 const initialBoardColumn = getInitialBoardColumn();
 initialBoardColumn.cards.push(getInitialCard());
 const initialBoardColumns = [initialBoardColumn];
@@ -33,11 +33,11 @@ export function useBoardColumns(): BoardColumn[] | null {
   return useContext(BoardColumnsContext);
 }
 
-export function useBoardColumnsDispatch(): ((action: BoardAction) => void) {
+export function useBoardColumnsDispatch(): ((action: BoardColumnsAction) => void) {
   return useContext(BoardColumnsDispatchContext);
 }
 
-function boardColumnsReducer(draft: BoardColumn[], action: BoardAction) {
+function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
   switch (action.type) {
     case 'addColumn': {
       const boardColumn = getInitialBoardColumn()

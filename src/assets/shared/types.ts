@@ -14,11 +14,34 @@ export type Card = {
   // parts: 
 }
 
-export type BoardAction =
+export type BoardColumnsAction =
   | { type: 'addColumn'; title: string }
   | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
   | { type: 'deleteColumn'; id: string }
   | { type: 'addCard'; boardColumn: BoardColumn; title: string }
   | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
+
+
+export type BoardData = {
+  backgroundColors: string[];
+  labels: Label[];
+}
+export type CustomBackgroundColor = {
+  value: string;
+  id: string;
+}
+export type Label = {
+  title: string;
+  color: string;
+  id: string;
+}
+
+export type BoardDataAction = {}
+  // | { type: 'addColumn'; title: string }
+  // | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
+  // | { type: 'deleteColumn'; id: string }
+  // | { type: 'addCard'; boardColumn: BoardColumn; title: string }
+  // | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
+
 
 export type BoardElementType = 'boardColumn' | 'card'

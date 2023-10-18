@@ -1,7 +1,7 @@
 import { rgba } from 'polished';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { useBoardColumns } from '../contexts/BoardContext';
+import { useBoardColumns } from '../contexts/BoardColumnsContext';
 import AddBoardElementButton from './AddBoardElementButton';
 import BoardColumnComponent from './BoardColumnComponent';
 import RenamableField from './RenamableField';

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useBoardColumnsDispatch } from '../contexts/BoardContext';
+import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';

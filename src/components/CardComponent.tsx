@@ -3,9 +3,10 @@ import { BoardColumn, Card } from '../assets/shared/types';
 import { faN, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import RenamableField, { RenamableFieldHandle } from './RenamableField';
-import { useBoardColumnsDispatch } from '../contexts/BoardContext';
+import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import { useEffect, useRef } from 'react';
 import { useAppearanceEditor } from '../contexts/AppearanceEditorContext';
+import { useBoardData } from '../contexts/BoardDataContext';
 
 const StyledCard = styled.div`
   width: 100%;
@@ -58,9 +59,11 @@ export default function CardComponent({column, card}: CardComponentProps) {
   const {openAppearanceEditor} = useAppearanceEditor();
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
+  const boardData = useBoardData();
 
   useEffect(() => {
     // openAppearanceEditor({card, column});
+    console.log(boardData?.backgroundColors);
   }, [])
   
   function renameCard(newTitle: string) {

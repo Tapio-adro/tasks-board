@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { BoardColumn, BoardAction } from '../assets/shared/types';
-import { useBoardColumnsDispatch } from '../contexts/BoardContext';
+import { BoardColumn, BoardColumnsAction } from '../assets/shared/types';
+import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import RenamableField from './RenamableField';
 import { XMark } from '../assets/shared/sharedComponents';
 import CardComponent from './CardComponent';
