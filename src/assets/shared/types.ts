@@ -11,6 +11,7 @@ export type BoardColumn = {
 export type Card = {
   title: string;
   id: string;
+  backgroundColor: string;
   // parts: 
 }
 
@@ -20,6 +21,7 @@ export type BoardColumnsAction =
   | { type: 'deleteColumn'; id: string }
   | { type: 'addCard'; boardColumn: BoardColumn; title: string }
   | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
+  | { type: 'changeCardBackgroundColor'; boardColumn: BoardColumn; card: Card; newColor: string }
 
 
 export type BoardData = {

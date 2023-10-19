@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Modal from './Modal';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BoardColumn, Card } from '../assets/shared/types';
 import RenamableField from './RenamableField';
 import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
@@ -10,6 +10,7 @@ import { useBoardData } from '../contexts/BoardDataContext';
 
 interface ColorButtonProps {
   readonly $color: string;
+  readonly $isActive: boolean;
 }
 
 const StyledEditor = styled.div`
@@ -44,16 +45,31 @@ const EditorSection = styled.section`
   background-color: #fff;
   box-shadow: ${(props) => props.theme.boxShadow};
   border-radius: 8px;
-  min-height: 200px;
-  padding: 8px;
+  /* min-height: 200px; */
+  padding: 12px;
 `;
 const SectionTitle = styled.div`
   color: ${(props) => props.theme.colors.buttonGrayText};
   text-align: center;
-  padding: 4px;
+  font-size: 16px;
+  padding: 4px 0px 12px;
+`;
+const ColorButtonsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
 `;
 const ColorButton = styled.button<ColorButtonProps>`
   background-color: ${props => props.$color};
+  height: 35px;
+  border-radius: 4px;
+  &:hover {
+    filter: saturate(85%) brightness(85%);
+  }
+  ${props => props.$isActive && css`
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #388bff;
+  `};
 `;
 
 export interface AppearanceEditorProps {
@@ -73,11 +89,26 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       boardColumn: column,
       card,
       newTitle
-    })
+    });
+  }
+  function changeCardBackgroundColor(color: string) {
+    boardColumnsDispatch({
+      type: 'changeCardBackgroundColor',
+      boardColumn: column,
+      card,
+      newColor: color
+    });
   }
 
   const colorButtons = boardData?.backgroundColors.map((color) => {
-    
+    return (
+      <ColorButton
+        key={color}
+        $color={color}
+        $isActive={card.backgroundColor === color}
+        onClick={() => changeCardBackgroundColor(color)}
+      />
+    );
   });
 
   return (
@@ -97,6 +128,9 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
           <EditorHalf>
             <EditorSection>
               <SectionTitle>Background color</SectionTitle>
+              <ColorButtonsContainer>
+                {colorButtons}
+              </ColorButtonsContainer>
             </EditorSection>
           </EditorHalf>
           <EditorHalf></EditorHalf>

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BoardColumn, Card } from '../assets/shared/types';
 import { faN, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +8,12 @@ import { useEffect, useRef } from 'react';
 import { useAppearanceEditor } from '../contexts/AppearanceEditorContext';
 import { useBoardData } from '../contexts/BoardDataContext';
 
-const StyledCard = styled.div`
+
+interface StyledCardProps {
+  readonly $backgroundColor: string;
+}
+
+const StyledCard = styled.div<StyledCardProps>`
   width: 100%;
   padding: 8px;
   padding-left: 16px;
@@ -19,7 +24,11 @@ const StyledCard = styled.div`
   cursor: pointer;
   &:hover {
     opacity: 0.8;
-  }
+  };
+  background-color: ${props => props.$backgroundColor == '' ? '#fff' : props.$backgroundColor};
+  ${props => props.$backgroundColor != '' && css`
+    font-weight: bold;
+  `};
 `;
 const CardTitle = styled.div`
   color: ${(props) => props.theme.colors.titleText};
@@ -84,6 +93,7 @@ export default function CardComponent({column, card}: CardComponentProps) {
   return (
     <>
       <StyledCard
+        $backgroundColor={card.backgroundColor}
         onContextMenu={handleCardContextMenu}
       >
         <CardTitle>

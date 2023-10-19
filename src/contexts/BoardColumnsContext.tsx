@@ -69,6 +69,13 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[columnIndex].cards[cardIndex].title = newTitle;
       break;
     }
+    case 'changeCardBackgroundColor': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      let newColor = action.newColor == action.card.backgroundColor ? '' : action.newColor;
+      draft[columnIndex].cards[cardIndex].backgroundColor = newColor;
+      break;
+    }
     default: {
       throw Error('Unknown action: ' + (action as any).type);
     }
