@@ -30,13 +30,16 @@ const StyledCard = styled.div<StyledCardProps>`
     font-weight: bold;
   `};
 `;
-const CardTitle = styled.div`
+const CardTitle = styled.div<StyledCardProps>`
   color: ${(props) => props.theme.colors.titleText};
   display: flex;
   align-items: center;
   input, .title {
     padding: 4px;
     flex: 1;
+    ${props => props.$backgroundColor != '' && css`
+      font-weight: bold;
+    `};
   }
   >div:not(.title) {
     flex: 1;
@@ -100,7 +103,9 @@ export default function CardComponent({column, card}: CardComponentProps) {
         $backgroundColor={card.backgroundColor}
         onContextMenu={handleCardContextMenu}
       >
-        <CardTitle>
+        <CardTitle
+          $backgroundColor={card.backgroundColor}
+        >
           <RenamableField
             ref={renamableFieldRef}
             fieldValue={card.title}

@@ -6,6 +6,8 @@ import RenamableField from './RenamableField';
 import { useBoardColumns, useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import { XMark } from '../assets/shared/sharedComponents';
 import { useBoardData } from '../contexts/BoardDataContext';
+import { useHotkeys } from 'react-hotkeys-hook';
+import Editor from './Editor';
 
 
 interface ColorButtonProps {
@@ -16,27 +18,6 @@ interface ResetButtonProps {
   readonly $isActive: boolean;
 }
 
-const StyledEditor = styled.div`
-  padding: 12px;
-  width: 768px;
-  cursor: auto;
-`;
-const EditorTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  color: ${(props) => props.theme.colors.titleText};
-  margin-bottom: 12px;
-  input, .title {
-    font-weight: bold;
-    font-size: 20px;
-    padding: 4px;
-    flex: 1;
-  }
-  >div:not(.title) {
-    flex: 1;
-  }
-`;
 const EditorContent = styled.div`
   display: flex;
   column-gap: 12px;
@@ -104,15 +85,8 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const boardData = useBoardData();
   
+  useHotkeys('esc', () => props.onClose());
 
-  function renameCard(newTitle: string) {
-    boardColumnsDispatch({
-      type: "renameCard",
-      boardColumn: column,
-      card,
-      newTitle
-    });
-  }
   function changeCardBackgroundColor(color: string) {
     boardColumnsDispatch({
       type: 'changeCardBackgroundColor',
@@ -134,35 +108,27 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   });
 
   return (
-    <Modal
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+    <Editor
+      card={card}
+      column={column}
+      {...props}
     >
-      <StyledEditor>
-        <EditorTitle>
-          <RenamableField
-            fieldValue={card.title}
-            onFieldValueChange={renameCard}
-            />
-          <XMark onClick={() => props.onClose()}/>
-        </EditorTitle>
-        <EditorContent>
-          <EditorHalf>
-            <EditorSection>
-              <SectionTitle>Background color</SectionTitle>
-              <ColorButtonsContainer>
-                {colorButtons}
-              </ColorButtonsContainer>
-              <ResetButton 
-                $isActive={card.backgroundColor != ''}
-                onClick={() => changeCardBackgroundColor('')}
-              >Reset color</ResetButton>
-            </EditorSection>
-          </EditorHalf>
-          <EditorHalf></EditorHalf>
-        </EditorContent>
-      </StyledEditor>
-    </Modal>
+      <EditorContent>
+        <EditorHalf>
+          <EditorSection>
+            <SectionTitle>Background color</SectionTitle>
+            <ColorButtonsContainer>
+              {colorButtons}
+            </ColorButtonsContainer>
+            <ResetButton 
+              $isActive={card.backgroundColor != ''}
+              onClick={() => changeCardBackgroundColor('')}
+            >Reset color</ResetButton>
+          </EditorSection>
+        </EditorHalf>
+        <EditorHalf></EditorHalf>
+      </EditorContent>
+    </Editor>
   );
 };
 

@@ -11,15 +11,16 @@ export function getInitialBoardColumn(): BoardColumn {
 export function getInitialCard(): Card {
   return {
     title: 'Card',
-    id: uuidv4()
+    id: uuidv4(),
+    backgroundColor: '',
   }
 }
 
 export function getInitialBoardData(): BoardData {
   return {
     backgroundColors: [
-      '#4BCE97', '#e2b203', '#faa53d', '#f87462', '#9f8fef', 
-      '#579dff', '#60c6d2', '#6DECA9', '#e774bb', '#8590a2'
+      '#4BCE97', '#F5CD47', '#faa53d', '#f87462', '#9f8fef', 
+      '#579dff', '#60c6d2', '#94C748', '#e774bb', '#8590a2'
     ],
     labels: [],
   }
