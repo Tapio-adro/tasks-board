@@ -21,22 +21,23 @@ export function useAppearanceEditor() {
 }
 
 export function AppearanceEditorProvider({ children }: { children: ReactNode }) {
-  const [modalProps, setModalProps] = useState<AppearanceEditorPassedProps | null>(null);
+  let modalProps: AppearanceEditorPassedProps | null = null;
   const [isOpen, setIsOpen] = useState(false);
 
   function openAppearanceEditor(props: AppearanceEditorPassedProps) {
-    setModalProps(props);
+    modalProps = props;
     setIsOpen(true);
   }
   function closeModal() {
+    // setModalProps(null);
     setIsOpen(false);
   }
   
 
   return (
     <AppearanceEditorContext.Provider value={{ openAppearanceEditor }}>
+      {/* {modalProps && } */}
       {children}
-      {modalProps && <AppearanceEditor {...modalProps} isOpen={isOpen} onClose={closeModal} />}
     </AppearanceEditorContext.Provider>
   );
 }

@@ -4,9 +4,9 @@ import { faN, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import RenamableField, { RenamableFieldHandle } from './RenamableField';
 import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
-import { useEffect, useRef } from 'react';
-import { useAppearanceEditor } from '../contexts/AppearanceEditorContext';
+import { useEffect, useRef, useState } from 'react';
 import { useBoardData } from '../contexts/BoardDataContext';
+import AppearanceEditor from './AppearanceEditor';
 
 
 interface StyledCardProps {
@@ -64,30 +64,34 @@ interface CardComponentProps {
   column: BoardColumn;
   card: Card;
 }
+
 export default function CardComponent({column, card}: CardComponentProps) {
-  const {openAppearanceEditor} = useAppearanceEditor();
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
+  const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
 
-  useEffect(() => {
-    openAppearanceEditor({card, column});
-  }, [])
+  // useEffect(() => {
+  //   openAppearanceEditor({column, card});
+  // }, [])
   
   function renameCard(newTitle: string) {
     boardColumnsDispatch({
-      type: "renameCard",
+      type: 'renameCard',
       boardColumn: column,
       card,
-      newTitle
-    })
+      newTitle,
+    });
   }
   function handleCardContextMenu(event: React.MouseEvent) {
     event.preventDefault();
-    openAppearanceEditor({card, column});
+    setIsAppearanceEditorOpen(true);
   }
   function handleTitleButtonClick(event: React.MouseEvent) {
     event.stopPropagation();
     renamableFieldRef.current?.toggleTextInput();
+  }
+  function closeAppearanceEditor() {
+    setIsAppearanceEditorOpen(false);
   }
 
   return (
@@ -112,6 +116,13 @@ export default function CardComponent({column, card}: CardComponentProps) {
           </EditTitleButton>
         </CardTitle>
       </StyledCard>
+      
+      {isAppearanceEditorOpen && <AppearanceEditor
+        card={card}
+        column={column}
+        isOpen={isAppearanceEditorOpen}
+        onClose={closeAppearanceEditor}
+      />}
     </>
   )
 }

@@ -14,6 +14,7 @@ const Background = styled.div<BackgroundProps>`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1;
+  cursor: auto;
 `;
 const ModalContent = styled.div`
   position: fixed;

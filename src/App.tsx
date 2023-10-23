@@ -2,7 +2,6 @@ import styled, { DefaultTheme, ThemeProvider } from 'styled-components';
 import BoardComponent from './components/BoardComponent';
 import bgImage from './assets/img/bg.jpg';
 import { BoardColumnsProvider } from './contexts/BoardColumnsContext';
-import { AppearanceEditorProvider } from './contexts/AppearanceEditorContext';
 import { BoardDataProvider } from './contexts/BoardDataContext';
 
 const StyledApp = styled.div`
@@ -29,11 +28,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <BoardColumnsProvider>
           <BoardDataProvider>
-            <AppearanceEditorProvider>
-              <StyledApp>
-                <BoardComponent />
-              </StyledApp>
-            </AppearanceEditorProvider>
+            <StyledApp>
+              <BoardComponent />
+            </StyledApp>
           </BoardDataProvider>
         </BoardColumnsProvider>
       </ThemeProvider>
