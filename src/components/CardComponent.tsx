@@ -45,7 +45,7 @@ const CardTitle = styled.div<StyledCardProps>`
     flex: 1;
   }
 `;
-const EditTitleButton = styled.button`
+const EditTitleButton = styled.button<StyledCardProps>`
   width: 32px;
   height: 32px;
   border-radius: 4px;
@@ -61,6 +61,12 @@ const EditTitleButton = styled.button`
   ${StyledCard}:hover & {
     opacity: 1;
   }
+  ${props => props.$backgroundColor != '' && css`
+    background-color: #fff;
+    &:hover {
+      background-color: #f1f2f4;
+    }
+  `};
 `;
 
 interface CardComponentProps {
@@ -73,9 +79,9 @@ export default function CardComponent({column, card}: CardComponentProps) {
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
 
-  // useEffect(() => {
-  //   openAppearanceEditor({column, card});
-  // }, [])
+  useEffect(() => {
+    setIsAppearanceEditorOpen(true);
+  }, [])
   
   function renameCard(newTitle: string) {
     boardColumnsDispatch({

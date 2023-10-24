@@ -23,6 +23,7 @@ const ModalContent = styled.div`
   transform: translate(-50%, -50%);
   background-color: #F1F2F4;
   border-radius: 8px;
+  overflow: hidden;
 `;
 
 interface ModalProps {

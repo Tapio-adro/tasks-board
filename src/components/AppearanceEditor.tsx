@@ -14,8 +14,11 @@ interface ColorButtonProps {
   readonly $color: string;
   readonly $isActive: boolean;
 }
-interface ResetButtonProps {
+interface GreyButtonProps {
   readonly $isActive: boolean;
+}
+interface LabelTitleProps {
+  readonly $backgroundColor: string;
 }
 
 const EditorContent = styled.div`
@@ -37,13 +40,15 @@ const SectionTitle = styled.div`
   color: ${(props) => props.theme.colors.buttonGrayText};
   text-align: center;
   font-size: 16px;
-  padding: 4px 0px 12px;
+  padding: 4px 0px 4px;
+  margin-bottom: 8px;
 `;
 const ColorButtonsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 1fr 1fr;
   gap: 12px;
+  margin-bottom: 16px;
 `;
 const ColorButton = styled.button<ColorButtonProps>`
   background-color: ${props => props.$color};
@@ -56,15 +61,14 @@ const ColorButton = styled.button<ColorButtonProps>`
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #388bff;
   `};
 `;
-const ResetButton = styled.button<ResetButtonProps>`
+const GreyButton = styled.button<GreyButtonProps>`
   border-radius: 4px;
   background-color: #091E420F;
   color: ${(props) => props.theme.colors.titleText};
   width: 100%;
   padding: 8px;
-  margin-top: 16px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 500;
   &:hover {
     background-color: #091e4224;
   }
@@ -73,6 +77,40 @@ const ResetButton = styled.button<ResetButtonProps>`
     pointer-events: none; 
   `};
 `;
+const LabelsContainer = styled.div`
+  &:not(:empty) {
+    margin-bottom: 16px;
+  }
+`;
+const Label = styled.div`
+  height: 32px;
+  display: flex;
+  align-items: stretch;
+`;
+const LabelContent = styled.button`
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+`;
+const LabelCheckbox = styled.input`
+  width: 16px;
+  margin-right: 10px;
+  margin-left: 2px;
+  cursor: pointer;
+`;
+const LabelTitle = styled.div<LabelTitleProps>`
+  flex: 1;
+  background-color: ${props => props.$backgroundColor};
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #533f04;
+`;
+const LabelEditButton = styled.button`
+  
+`;
+
 
 export interface AppearanceEditorProps {
   column: BoardColumn;
@@ -106,6 +144,16 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       />
     );
   });
+  const labels = boardData?.labels.map((label) => {
+    return (
+      <Label key={label.id}>
+        <LabelContent>
+          <LabelCheckbox type='checkbox' />
+          <LabelTitle $backgroundColor={label.color}>{label.title}</LabelTitle>
+        </LabelContent>
+      </Label>
+    );
+  });
 
   return (
     <Editor
@@ -120,13 +168,21 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
             <ColorButtonsContainer>
               {colorButtons}
             </ColorButtonsContainer>
-            <ResetButton 
+            <GreyButton 
               $isActive={card.backgroundColor != ''}
               onClick={() => changeCardBackgroundColor('')}
-            >Reset color</ResetButton>
+            >Reset color</GreyButton>
           </EditorSection>
         </EditorHalf>
-        <EditorHalf></EditorHalf>
+        <EditorHalf>
+          <EditorSection>
+            <SectionTitle>Labels</SectionTitle>
+            <LabelsContainer>
+              {labels}
+            </LabelsContainer>
+            <GreyButton $isActive={true}>Create a new label</GreyButton>
+          </EditorSection>
+        </EditorHalf>
       </EditorContent>
     </Editor>
   );

@@ -9,6 +9,10 @@ import { useBoardData } from '../contexts/BoardDataContext';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 
+interface ColoredBarProps {
+  readonly $backgroundColor: string;
+}
+
 const StyledEditor = styled.div`
   padding: 12px;
   width: 768px;
@@ -29,6 +33,13 @@ const EditorTitle = styled.div`
   >div:not(.title) {
     flex: 1;
   }
+`;
+const ColoredBar = styled.div<ColoredBarProps>`
+  background-color: ${props => props.$backgroundColor};
+  height: 0;
+  ${props => props.$backgroundColor != '' && css`
+    height: 50px;
+  `}; 
 `;
 
 export interface EditorProps {
@@ -59,6 +70,7 @@ const Editor: React.FC<EditorProps> = ({ column, card, children, ...props }) => 
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
+      <ColoredBar $backgroundColor={card.backgroundColor} />
       <StyledEditor>
         <EditorTitle>
           <RenamableField
@@ -69,6 +81,7 @@ const Editor: React.FC<EditorProps> = ({ column, card, children, ...props }) => 
         </EditorTitle>
         {children}
       </StyledEditor>
+      <ColoredBar $backgroundColor={card.backgroundColor} />
     </Modal>
   );
 };
