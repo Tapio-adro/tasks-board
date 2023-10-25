@@ -76,9 +76,6 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[columnIndex].cards[cardIndex].backgroundColor = newColor;
       break;
     }
-    default: {
-      throw Error('Unknown action: ' + (action as any).type);
-    }
   }
 }
 

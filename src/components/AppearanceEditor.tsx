@@ -1,14 +1,17 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Modal from './Modal';
 import styled, { css } from 'styled-components';
-import { BoardColumn, Card } from '../assets/shared/types';
+import { BoardColumn, Card, Label } from '../assets/shared/types';
 import RenamableField from './RenamableField';
 import { useBoardColumns, useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import { XMark } from '../assets/shared/sharedComponents';
 import { useBoardData } from '../contexts/BoardDataContext';
 import { useHotkeys } from 'react-hotkeys-hook';
-import Editor from './Editor';
-
+import CardEditor from './CardEditor';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import LabelEditor from './LabelEditor';
+import { getInitialLabel } from '../assets/scripts/objectsGenerator';
 
 interface ColorButtonProps {
   readonly $color: string;
@@ -82,7 +85,7 @@ const LabelsContainer = styled.div`
     margin-bottom: 16px;
   }
 `;
-const Label = styled.div`
+const LabelWrapper = styled.div`
   height: 32px;
   display: flex;
   align-items: stretch;
@@ -108,7 +111,17 @@ const LabelTitle = styled.div<LabelTitleProps>`
   color: #533f04;
 `;
 const LabelEditButton = styled.button`
-  
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: ${(props) => props.theme.colors.titleText};
+  &:hover {
+    background-color: #091e4224;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.colors.buttonGrayText};
 `;
 
 
@@ -122,9 +135,9 @@ export interface AppearanceEditorProps {
 const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...props }) => {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const boardData = useBoardData();
+  const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(true);
+  const [currentLabel, setCurrentLabel] = useState<Label>(getInitialLabel());
   
-  useHotkeys('esc', () => props.onClose());
-
   function changeCardBackgroundColor(color: string) {
     boardColumnsDispatch({
       type: 'changeCardBackgroundColor',
@@ -133,6 +146,8 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       newColor: color
     });
   }
+
+  useHotkeys('esc', () => props.onClose(), {enabled: !isLabelEditorOpen});
 
   const colorButtons = boardData?.backgroundColors.map((color) => {
     return (
@@ -146,45 +161,55 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   });
   const labels = boardData?.labels.map((label) => {
     return (
-      <Label key={label.id}>
+      <LabelWrapper key={label.id}>
         <LabelContent>
           <LabelCheckbox type='checkbox' />
           <LabelTitle $backgroundColor={label.color}>{label.title}</LabelTitle>
+          <LabelEditButton>
+            <FontAwesomeIcon icon={faPen} />
+          </LabelEditButton>
         </LabelContent>
-      </Label>
+      </LabelWrapper>
     );
   });
 
   return (
-    <Editor
-      card={card}
-      column={column}
-      {...props}
-    >
-      <EditorContent>
-        <EditorHalf>
-          <EditorSection>
-            <SectionTitle>Background color</SectionTitle>
-            <ColorButtonsContainer>
-              {colorButtons}
-            </ColorButtonsContainer>
-            <GreyButton 
-              $isActive={card.backgroundColor != ''}
-              onClick={() => changeCardBackgroundColor('')}
-            >Reset color</GreyButton>
-          </EditorSection>
-        </EditorHalf>
-        <EditorHalf>
-          <EditorSection>
-            <SectionTitle>Labels</SectionTitle>
-            <LabelsContainer>
-              {labels}
-            </LabelsContainer>
-            <GreyButton $isActive={true}>Create a new label</GreyButton>
-          </EditorSection>
-        </EditorHalf>
-      </EditorContent>
-    </Editor>
+    <>
+      <CardEditor 
+        card={card} column={column} {...props}
+      >
+        <EditorContent>
+          <EditorHalf>
+            <EditorSection>
+              <SectionTitle>Background color</SectionTitle>
+              <ColorButtonsContainer>{colorButtons}</ColorButtonsContainer>
+              <GreyButton
+                $isActive={card.backgroundColor != ''}
+                onClick={() => changeCardBackgroundColor('')}
+              >
+                Reset color
+              </GreyButton>
+            </EditorSection>
+          </EditorHalf>
+          <EditorHalf>
+            <EditorSection>
+              <SectionTitle>Labels</SectionTitle>
+              <LabelsContainer>{labels}</LabelsContainer>
+              <GreyButton $isActive={true}>Create a new label</GreyButton>
+            </EditorSection>
+          </EditorHalf>
+        </EditorContent>
+
+      </CardEditor>
+      {isLabelEditorOpen && (
+        <LabelEditor
+          mode="create"
+          isOpen={isLabelEditorOpen}
+          onClose={() => setIsLabelEditorOpen(false)}
+          label={currentLabel}
+        />
+      )}
+    </>
   );
 };
 

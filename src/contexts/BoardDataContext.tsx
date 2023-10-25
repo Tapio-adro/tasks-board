@@ -1,6 +1,6 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
 import { BoardData, BoardDataAction } from '../assets/shared/types';
-import { getInitialBoardData } from '../assets/scripts/objectsGenerator';
+import { getInitialBoardData, getInitialLabel } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
 interface Props {
@@ -35,50 +35,40 @@ export function useBoardDataDispatch(): ((action: BoardDataAction) => void) {
   return useContext(BoardDataDispatchContext);
 }
 
+// writer label actions which names have camelCase format and are defined in src/assets/shared/types.ts
+// actions should be written in the same way as for the card editor and are defined in BoardColumnsContext.tsx
+// there should be such actions as: addLabel, renameLabel, changeLabelColor, deleteLabel
+// use immer to update state
+// action type is BoardDataAction
+// the action should be written in the same way as for the card editor and are defined in BoardColumnsContext.tsx
+// actions properties are defined in src/assets/shared/types.ts in BoardDataAction interface
+// write actions similar to the ones in BoardColumnsContext.tsx
 function boardDataReducer(draft: BoardData, action: BoardDataAction) {
-  // switch (action.type) {
-  //   case 'addColumn': {
-  //     const boardColumn = getInitialBoardColumn()
-  //     boardColumn.title = action.title
-  //     draft.push(boardColumn);
-  //     break;
-  //   }
-  //   case 'renameColumn': {
-  //     const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
-  //     let newTitle = action.newTitle != '' ? action.newTitle : action.boardColumn.title;
-  //     draft[columnIndex].title = newTitle;
-  //     break;
-  //   }
-  //   case 'deleteColumn': {
-  //     return draft.filter(boardColumn => boardColumn.id !== action.id);
-  //   }
-  //   case 'addCard': {
-  //     const column = action.boardColumn
-  //     const card = getInitialCard()
-  //     card.title = action.title
-  //     const columnIndex = getColumnIndexById(draft, column.id)
-  //     draft[columnIndex].cards.push(card);
-  //     break;
-  //   }
-  //   case 'renameCard': {
-  //     const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
-  //     const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
-  //     let newTitle = action.newTitle != '' ? action.newTitle : action.card.title;
-  //     draft[columnIndex].cards[cardIndex].title = newTitle;
-  //     break;
-  //   }
-  //   default: {
-  //     throw Error('Unknown action: ' + (action as any).type);
-  //   }
-  // }
+  switch (action.type) {
+    case "addLabel": {
+      const label = getInitialLabel();
+      label.title = action.title;
+      label.color = action.color;
+      draft.labels.push(label);
+      break;
+    }
+    case "renameLabel": {
+      const labelIndex = getLabelIndexById(draft, action.label.id);
+      let newTitle = action.newTitle != "" ? action.newTitle : action.label.title;
+      draft.labels[labelIndex].title = newTitle;
+      break;
+    }
+    case "changeLabelColor": {
+      const labelIndex = getLabelIndexById(draft, action.label.id);
+      draft.labels[labelIndex].color = action.newColor;
+      break;
+    }
+    case "deleteLabel": {
+      draft.labels.filter((label) => label.id !== action.id);
+      return draft;
+    }
+  }
 }
-
-// function getColumnIndexById(draft: BoardColumn[], id: string): number {
-//   return draft.findIndex((column) => column.id === id);
-// }
-// function getCardIndexById(column: BoardColumn, id: string): number {
-//   return column.cards.findIndex((card) => card.id === id);
-// }
-// function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
-//   return draft[getColumnIndexById(draft, id)]
-// }
+function getLabelIndexById(draft: BoardData, id: string) {
+  return draft.labels.findIndex((label) => label.id === id);
+}

@@ -28,22 +28,18 @@ export type BoardData = {
   backgroundColors: string[];
   labels: Label[];
 }
-export type CustomBackgroundColor = {
-  value: string;
-  id: string;
-}
 export type Label = {
   title: string;
   color: string;
   id: string;
 }
 
-export type BoardDataAction = {}
-  // | { type: 'addColumn'; title: string }
-  // | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
-  // | { type: 'deleteColumn'; id: string }
-  // | { type: 'addCard'; boardColumn: BoardColumn; title: string }
-  // | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
+
+export type BoardDataAction = 
+  | { type: 'addLabel'; title: string; color: string }
+  | { type: 'renameLabel'; label: Label; newTitle: string }
+  | { type: 'changeLabelColor'; label: Label; newColor: string }
+  | { type: 'deleteLabel'; id: string }
 
 
 export type BoardElementType = 'boardColumn' | 'card'

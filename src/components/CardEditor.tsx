@@ -13,12 +13,12 @@ interface ColoredBarProps {
   readonly $backgroundColor: string;
 }
 
-const StyledEditor = styled.div`
+const StyledCardEditor = styled.div`
   padding: 12px;
   width: 768px;
   cursor: auto;
 `;
-const EditorTitle = styled.div`
+const CardEditorTitle = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ const ColoredBar = styled.div<ColoredBarProps>`
   `}; 
 `;
 
-export interface EditorProps {
+export interface CardEditorProps {
   children: ReactNode;
   column: BoardColumn;
   card: Card;
@@ -50,12 +50,10 @@ export interface EditorProps {
   onClose: Function;
 }
 
-const Editor: React.FC<EditorProps> = ({ column, card, children, ...props }) => {
+const CardEditor: React.FC<CardEditorProps> = ({ column, card, children, ...props }) => {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const boardData = useBoardData();
   
-  useHotkeys('esc', () => props.onClose());
-
   function renameCard(newTitle: string) {
     boardColumnsDispatch({
       type: "renameCard",
@@ -71,19 +69,19 @@ const Editor: React.FC<EditorProps> = ({ column, card, children, ...props }) => 
       onClose={props.onClose}
     >
       <ColoredBar $backgroundColor={card.backgroundColor} />
-      <StyledEditor>
-        <EditorTitle>
+      <StyledCardEditor>
+        <CardEditorTitle>
           <RenamableField
             fieldValue={card.title}
             onFieldValueChange={renameCard}
             />
           <XMark onClick={() => props.onClose()}/>
-        </EditorTitle>
+        </CardEditorTitle>
         {children}
-      </StyledEditor>
+      </StyledCardEditor>
       <ColoredBar $backgroundColor={card.backgroundColor} />
     </Modal>
   );
 };
 
-export default Editor;
+export default CardEditor;

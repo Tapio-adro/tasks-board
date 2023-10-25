@@ -1,4 +1,4 @@
-import { BoardColumn, BoardData, Card } from '../shared/types';
+import { BoardColumn, BoardData, Card, Label } from '../shared/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getInitialBoardColumn(): BoardColumn {
@@ -13,6 +13,13 @@ export function getInitialCard(): Card {
     title: 'Card',
     id: uuidv4(),
     backgroundColor: '',
+  }
+}
+export function getInitialLabel(): Label {
+  return {
+    title: 'Label',
+    color: '',
+    id: uuidv4(),
   }
 }
 

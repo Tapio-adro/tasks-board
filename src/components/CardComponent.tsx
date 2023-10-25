@@ -118,7 +118,8 @@ export default function CardComponent({column, card}: CardComponentProps) {
             onFieldValueChange={renameCard}
             showOnClick={false}
           />
-          <EditTitleButton 
+          <EditTitleButton
+            $backgroundColor={card.backgroundColor}
             onClick={handleTitleButtonClick}
             onMouseOver={() => renamableFieldRef.current?.toggleOutsideClick(true)}
             onMouseOut={() => renamableFieldRef.current?.toggleOutsideClick(false)}
