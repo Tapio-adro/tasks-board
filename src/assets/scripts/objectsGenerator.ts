@@ -13,11 +13,12 @@ export function getInitialCard(): Card {
     title: 'Card',
     id: uuidv4(),
     backgroundColor: '',
+    labels: [],
   }
 }
 export function getInitialLabel(): Label {
   return {
-    title: 'Label',
+    title: '',
     color: '',
     id: uuidv4(),
   }

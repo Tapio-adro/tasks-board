@@ -35,17 +35,9 @@ export function useBoardDataDispatch(): ((action: BoardDataAction) => void) {
   return useContext(BoardDataDispatchContext);
 }
 
-// writer label actions which names have camelCase format and are defined in src/assets/shared/types.ts
-// actions should be written in the same way as for the card editor and are defined in BoardColumnsContext.tsx
-// there should be such actions as: addLabel, renameLabel, changeLabelColor, deleteLabel
-// use immer to update state
-// action type is BoardDataAction
-// the action should be written in the same way as for the card editor and are defined in BoardColumnsContext.tsx
-// actions properties are defined in src/assets/shared/types.ts in BoardDataAction interface
-// write actions similar to the ones in BoardColumnsContext.tsx
 function boardDataReducer(draft: BoardData, action: BoardDataAction) {
   switch (action.type) {
-    case "addLabel": {
+    case "createLabel": {
       const label = getInitialLabel();
       label.title = action.title;
       label.color = action.color;
@@ -64,8 +56,8 @@ function boardDataReducer(draft: BoardData, action: BoardDataAction) {
       break;
     }
     case "deleteLabel": {
-      draft.labels.filter((label) => label.id !== action.id);
-      return draft;
+      const labels = draft.labels.filter((label) => label.id !== action.id);
+      return { ...draft, labels };
     }
   }
 }

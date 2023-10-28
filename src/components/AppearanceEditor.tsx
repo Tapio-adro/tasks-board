@@ -10,7 +10,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import CardEditor from './CardEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import LabelEditor from './LabelEditor';
+import LabelEditor, { LabelEditorMode } from './LabelEditor';
 import { getInitialLabel } from '../assets/scripts/objectsGenerator';
 
 interface ColorButtonProps {
@@ -81,6 +81,9 @@ const GreyButton = styled.button<GreyButtonProps>`
   `};
 `;
 const LabelsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   &:not(:empty) {
     margin-bottom: 16px;
   }
@@ -106,14 +109,18 @@ const LabelTitle = styled.div<LabelTitleProps>`
   background-color: ${props => props.$backgroundColor};
   border-radius: 4px;
   display: flex;
-  justify-content: center;
   align-items: center;
   color: #533f04;
+  padding: 12px;
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 const LabelEditButton = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 4px;
+  margin-left: 4px;
   color: ${(props) => props.theme.colors.titleText};
   &:hover {
     background-color: #091e4224;
@@ -135,9 +142,12 @@ export interface AppearanceEditorProps {
 const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...props }) => {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const boardData = useBoardData();
-  const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(true);
-  const [currentLabel, setCurrentLabel] = useState<Label>(getInitialLabel());
+  const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
+  const [labelEditorMode, setLabelEditorMode] = useState<LabelEditorMode>('create');
+  const [currentLabelId, setCurrentLabelId] = useState<string>('');
   
+  useHotkeys('esc', () => props.onClose(), {enabled: !isLabelEditorOpen});
+
   function changeCardBackgroundColor(color: string) {
     boardColumnsDispatch({
       type: 'changeCardBackgroundColor',
@@ -146,8 +156,19 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       newColor: color
     });
   }
-
-  useHotkeys('esc', () => props.onClose(), {enabled: !isLabelEditorOpen});
+  function createLabel() {
+    setCurrentLabelId('');
+    setLabelEditorMode('create');
+    setIsLabelEditorOpen(true);
+  }
+  function editLabel(label: Label) {
+    setCurrentLabelId(label.id);
+    setLabelEditorMode('edit');
+    setIsLabelEditorOpen(true);
+  }
+  function handleLabelClick() {
+    
+  }
 
   const colorButtons = boardData?.backgroundColors.map((color) => {
     return (
@@ -163,12 +184,17 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
     return (
       <LabelWrapper key={label.id}>
         <LabelContent>
-          <LabelCheckbox type='checkbox' />
+          <LabelCheckbox type='checkbox'
+            checked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
+            onChange={handleLabelClick}
+          />
           <LabelTitle $backgroundColor={label.color}>{label.title}</LabelTitle>
-          <LabelEditButton>
-            <FontAwesomeIcon icon={faPen} />
-          </LabelEditButton>
         </LabelContent>
+        <LabelEditButton
+          onClick={() => editLabel(label)}
+        >
+          <FontAwesomeIcon icon={faPen} />
+        </LabelEditButton>
       </LabelWrapper>
     );
   });
@@ -195,7 +221,10 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
             <EditorSection>
               <SectionTitle>Labels</SectionTitle>
               <LabelsContainer>{labels}</LabelsContainer>
-              <GreyButton $isActive={true}>Create a new label</GreyButton>
+              <GreyButton
+                $isActive={true} 
+                onClick={createLabel}
+              >Create a new label</GreyButton>
             </EditorSection>
           </EditorHalf>
         </EditorContent>
@@ -203,10 +232,10 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       </CardEditor>
       {isLabelEditorOpen && (
         <LabelEditor
-          mode="create"
+          editorMode={labelEditorMode}
           isOpen={isLabelEditorOpen}
           onClose={() => setIsLabelEditorOpen(false)}
-          label={currentLabel}
+          labelId={currentLabelId}
         />
       )}
     </>

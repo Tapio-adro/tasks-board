@@ -1,8 +1,12 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const StyledXMark = styled.button`
+
+interface StyledXMarkProps {
+  readonly $noMarginLeft: boolean;
+}
+const StyledXMark = styled.button<StyledXMarkProps>`
   height: 32px;
   width: 32px;
   display: flex;
@@ -18,12 +22,44 @@ const StyledXMark = styled.button`
     font-weight: normal;
     font-size: 18px;
   }
+  ${props => props.$noMarginLeft && css`
+    margin-left: 0;
+  `};
+`;
+const StyledIconButton = styled.button`
+  height: 32px;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.colors.buttonGrayText};
+  border-radius: 4px;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.buttonGrayHoverBg};
+  }
+  svg {
+    font-weight: normal;
+    font-size: 18px;
+  }
 `;
 
-export function XMark(props: { onClick: () => void }) {
+interface XMarkProps {
+  onClick: () => void;
+  noMarginLeft?: boolean;
+}
+
+const XMark: React.FC<XMarkProps> = ({onClick, noMarginLeft = false}) => {
   return (
-    <StyledXMark onClick={props.onClick}>
+    <StyledXMark onClick={onClick} $noMarginLeft={noMarginLeft} >
       <FontAwesomeIcon icon={faXmark} />
     </StyledXMark>
+  );
+}
+export { XMark };
+export function IconButton(props: { onClick: () => void, children: React.ReactNode }) {
+  return (
+    <StyledIconButton onClick={props.onClick}>
+      {props.children}
+    </StyledIconButton>
   );
 }

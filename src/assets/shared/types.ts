@@ -12,6 +12,7 @@ export type Card = {
   title: string;
   id: string;
   backgroundColor: string;
+  labels: Label[];
   // parts: 
 }
 
@@ -36,7 +37,7 @@ export type Label = {
 
 
 export type BoardDataAction = 
-  | { type: 'addLabel'; title: string; color: string }
+  | { type: 'createLabel'; title: string; color: string }
   | { type: 'renameLabel'; label: Label; newTitle: string }
   | { type: 'changeLabelColor'; label: Label; newColor: string }
   | { type: 'deleteLabel'; id: string }

@@ -13,7 +13,12 @@ interface ColoredBarProps {
   readonly $backgroundColor: string;
 }
 
+const CardEditorWrapper = styled.div`
+  border-radius: 8px;
+  overflow: hidden;
+`;
 const StyledCardEditor = styled.div`
+  background-color: #F1F2F4;
   padding: 12px;
   width: 768px;
   cursor: auto;
@@ -68,18 +73,20 @@ const CardEditor: React.FC<CardEditorProps> = ({ column, card, children, ...prop
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
-      <ColoredBar $backgroundColor={card.backgroundColor} />
-      <StyledCardEditor>
-        <CardEditorTitle>
-          <RenamableField
-            fieldValue={card.title}
-            onFieldValueChange={renameCard}
-            />
-          <XMark onClick={() => props.onClose()}/>
-        </CardEditorTitle>
-        {children}
-      </StyledCardEditor>
-      <ColoredBar $backgroundColor={card.backgroundColor} />
+      <CardEditorWrapper>
+        <ColoredBar $backgroundColor={card.backgroundColor} />
+        <StyledCardEditor>
+          <CardEditorTitle>
+            <RenamableField
+              fieldValue={card.title}
+              onFieldValueChange={renameCard}
+              />
+            <XMark onClick={() => props.onClose()}/>
+          </CardEditorTitle>
+          {children}
+        </StyledCardEditor>
+        <ColoredBar $backgroundColor={card.backgroundColor} />
+      </CardEditorWrapper>
     </Modal>
   );
 };

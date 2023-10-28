@@ -80,7 +80,7 @@ export default function CardComponent({column, card}: CardComponentProps) {
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
 
   useEffect(() => {
-    setIsAppearanceEditorOpen(true);
+    // setIsAppearanceEditorOpen(true);
   }, [])
   
   function renameCard(newTitle: string) {
