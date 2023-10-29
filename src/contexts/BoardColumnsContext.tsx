@@ -76,6 +76,29 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[columnIndex].cards[cardIndex].backgroundColor = newColor;
       break;
     }
+    case 'toggleCardLabel': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const labelIndex = card.labels.findIndex((label) => label.id === action.label.id);
+      if (labelIndex === -1) {
+        card.labels.push(action.label);
+      } else {
+        card.labels.splice(labelIndex, 1);
+      }
+      break;
+    }
+    case 'removeLabelFromAllCards': {
+      draft.forEach((column) => {
+        column.cards.forEach((card) => {
+          const labelIndex = card.labels.findIndex((label) => label.id === action.label.id);
+          if (labelIndex !== -1) {
+            card.labels.splice(labelIndex, 1);
+          }
+        });
+      });
+      break;
+    }
   }
 }
 

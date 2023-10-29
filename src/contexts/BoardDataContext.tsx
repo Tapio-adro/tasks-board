@@ -56,8 +56,12 @@ function boardDataReducer(draft: BoardData, action: BoardDataAction) {
       break;
     }
     case "deleteLabel": {
-      const labels = draft.labels.filter((label) => label.id !== action.id);
+      const labels = draft.labels.filter((label) => label.id !== action.label.id);
       return { ...draft, labels };
+    }
+    case "toggleCardLabelsExpand": {
+      draft.areCardLabelsExpanded = !draft.areCardLabelsExpanded;
+      break;
     }
   }
 }

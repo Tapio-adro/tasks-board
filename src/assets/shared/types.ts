@@ -23,11 +23,14 @@ export type BoardColumnsAction =
   | { type: 'addCard'; boardColumn: BoardColumn; title: string }
   | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
   | { type: 'changeCardBackgroundColor'; boardColumn: BoardColumn; card: Card; newColor: string }
+  | { type: 'toggleCardLabel'; boardColumn: BoardColumn; card: Card; label: Label }
+  | { type: 'removeLabelFromAllCards'; label: Label }
 
 
 export type BoardData = {
   backgroundColors: string[];
   labels: Label[];
+  areCardLabelsExpanded: boolean;
 }
 export type Label = {
   title: string;
@@ -40,7 +43,8 @@ export type BoardDataAction =
   | { type: 'createLabel'; title: string; color: string }
   | { type: 'renameLabel'; label: Label; newTitle: string }
   | { type: 'changeLabelColor'; label: Label; newColor: string }
-  | { type: 'deleteLabel'; id: string }
+  | { type: 'deleteLabel'; label: Label }
+  | { type: 'toggleCardLabelsExpand' }
 
 
 export type BoardElementType = 'boardColumn' | 'card'

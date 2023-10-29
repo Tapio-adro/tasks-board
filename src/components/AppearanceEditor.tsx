@@ -166,8 +166,13 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
     setLabelEditorMode('edit');
     setIsLabelEditorOpen(true);
   }
-  function handleLabelClick() {
-    
+  function handleLabelClick(label: Label) {
+    boardColumnsDispatch({
+      type: 'toggleCardLabel',
+      boardColumn: column,
+      card,
+      label
+    });
   }
 
   const colorButtons = boardData?.backgroundColors.map((color) => {
@@ -183,10 +188,11 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   const labels = boardData?.labels.map((label) => {
     return (
       <LabelWrapper key={label.id}>
-        <LabelContent>
+        <LabelContent
+          onClick={() => handleLabelClick(label)}
+        >
           <LabelCheckbox type='checkbox'
             checked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
-            onChange={handleLabelClick}
           />
           <LabelTitle $backgroundColor={label.color}>{label.title}</LabelTitle>
         </LabelContent>

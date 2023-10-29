@@ -8,6 +8,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { IconButton, XMark } from '../assets/shared/sharedComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 
 
 
@@ -116,7 +117,8 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
   const [isConfirmingDeletion, setIsConfirmingDeletion] = useState(false);
 
   const boardData = useBoardData();
-  const dispatch = useBoardDataDispatch();
+  const boardDataDispatch = useBoardDataDispatch();
+  const boardColumnsDispatch = useBoardColumnsDispatch();
 
   useEffect(() => {
     if (editorMode === 'edit') {
@@ -136,7 +138,7 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
   useHotkeys('enter', () => handleConfirmButtonClick(), {enableOnFormTags: true});
 
   function createLabel() {
-    dispatch({ 
+    boardDataDispatch({ 
       type: 'createLabel',
       title: labelTitle,
       color: labelColor,
@@ -161,12 +163,12 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
     if (editorMode === 'create') {
       createLabel();
     } else if (editorMode === 'edit') {
-      dispatch({
+      boardDataDispatch({
         type: 'renameLabel',
         label: currentLabel,
         newTitle: labelTitle,
       });
-      dispatch({
+      boardDataDispatch({
         type: 'changeLabelColor',
         label: currentLabel,
         newColor: labelColor,
@@ -177,9 +179,13 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
   function handleDeleteConfirmation() {
     setIsConfirmingDeletion(false);
     props.onClose();
-    dispatch({
+    boardColumnsDispatch({
+      type: 'removeLabelFromAllCards',
+      label: currentLabel,
+    });
+    boardDataDispatch({
       type: 'deleteLabel',
-      id: currentLabel.id,
+      label: currentLabel,
     });
   }
   

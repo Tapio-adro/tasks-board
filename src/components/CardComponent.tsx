@@ -5,25 +5,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import RenamableField, { RenamableFieldHandle } from './RenamableField';
 import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import { useEffect, useRef, useState } from 'react';
-import { useBoardData } from '../contexts/BoardDataContext';
+import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext';
 import AppearanceEditor from './AppearanceEditor';
 
 
 interface StyledCardProps {
   readonly $backgroundColor: string;
 }
+interface LabelProps {
+  readonly $isExpanded: boolean;
+}
 
 const StyledCard = styled.div<StyledCardProps>`
   width: 100%;
-  padding: 8px;
-  padding-left: 16px;
+  padding: 8px 12px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: ${(props) => props.theme.boxShadow};
   min-height: 36px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   &:hover {
-    opacity: 0.8;
+    box-shadow: inset 0 0 0 1.5px black;
   };
   background-color: ${props => props.$backgroundColor == '' ? '#fff' : props.$backgroundColor};
   ${props => props.$backgroundColor != '' && css`
@@ -34,14 +39,19 @@ const CardTitle = styled.div<StyledCardProps>`
   color: ${(props) => props.theme.colors.titleText};
   display: flex;
   align-items: center;
-  input, .title {
+  align-self: stretch;
+  input,
+  .title {
     padding: 4px;
     flex: 1;
-    ${props => props.$backgroundColor != '' && css`
-      font-weight: bold;
-    `};
+    font-weight: 400;
+    ${(props) =>
+      props.$backgroundColor != '' &&
+      css`
+        font-weight: bold;
+      `};
   }
-  >div:not(.title) {
+  > div:not(.title) {
     flex: 1;
   }
 `;
@@ -68,6 +78,37 @@ const EditTitleButton = styled.button<StyledCardProps>`
     }
   `};
 `;
+const Labels = styled.div<StyledCardProps>`
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-bottom: 2px;
+  &:empty {
+    display: none;
+  }
+  ${props => props.$backgroundColor != '' && css`
+    background-color: ${(props) => props.theme.colors.bgColor};
+    padding: 3px;
+    border-radius: 4px;
+  `};
+`;
+const Label = styled.button<LabelProps>`
+  width: 40px;
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  &:hover {
+    filter: saturate(85%) brightness(85%);
+  }
+  ${props => props.$isExpanded && css`
+    width: auto;
+    height: auto;
+    padding: 4px;
+    min-width: 25px;
+  `};
+`;  
 
 interface CardComponentProps {
   column: BoardColumn;
@@ -78,6 +119,8 @@ export default function CardComponent({column, card}: CardComponentProps) {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
+  const boardData = useBoardData();
+  const boardDataDispatch = useBoardDataDispatch();
 
   useEffect(() => {
     // setIsAppearanceEditorOpen(true);
@@ -102,6 +145,24 @@ export default function CardComponent({column, card}: CardComponentProps) {
   function closeAppearanceEditor() {
     setIsAppearanceEditorOpen(false);
   }
+  function toggleCardLabelsExpand() {
+    boardDataDispatch({
+      type: 'toggleCardLabelsExpand',
+    });
+  }
+
+  const labels = card.labels.map((label) => {
+    return (
+      <Label
+        key={label.id}
+        style={{backgroundColor: label.color}}
+        onClick={toggleCardLabelsExpand}
+        $isExpanded={boardData?.areCardLabelsExpanded ?? false}
+      >
+        {boardData?.areCardLabelsExpanded && label.title}
+      </Label>
+    );
+  });
 
   return (
     <>
@@ -109,6 +170,11 @@ export default function CardComponent({column, card}: CardComponentProps) {
         $backgroundColor={card.backgroundColor}
         onContextMenu={handleCardContextMenu}
       >
+        <Labels
+          $backgroundColor={card.backgroundColor}
+        >
+          {labels}
+        </Labels>
         <CardTitle
           $backgroundColor={card.backgroundColor}
         >
@@ -121,6 +187,7 @@ export default function CardComponent({column, card}: CardComponentProps) {
           <EditTitleButton
             $backgroundColor={card.backgroundColor}
             onClick={handleTitleButtonClick}
+            onContextMenu={(e) => {e.preventDefault(); handleTitleButtonClick(e)}}
             onMouseOver={() => renamableFieldRef.current?.toggleOutsideClick(true)}
             onMouseOut={() => renamableFieldRef.current?.toggleOutsideClick(false)}
           >

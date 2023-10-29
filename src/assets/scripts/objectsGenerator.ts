@@ -31,5 +31,6 @@ export function getInitialBoardData(): BoardData {
       '#579dff', '#60c6d2', '#94C748', '#e774bb', '#8590a2'
     ],
     labels: [{title: 'Label', id: '123', color: '#f87462'}],
+    areCardLabelsExpanded: false,
   }
 }
