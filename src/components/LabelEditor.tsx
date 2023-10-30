@@ -134,7 +134,7 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
     inputRef.current?.focus();
   }, []);
   
-  useHotkeys('esc', () => props.onClose());
+  useHotkeys('esc', () => props.onClose(), {enableOnFormTags: true});
   useHotkeys('enter', () => handleConfirmButtonClick(), {enableOnFormTags: true});
 
   function createLabel() {

@@ -52,7 +52,7 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       break;
     }
     case 'deleteColumn': {
-      return draft.filter(boardColumn => boardColumn.id !== action.id);
+      return draft.filter((column) => column.id !== action.boardColumn.id);
     }
     case 'addCard': {
       const column = action.boardColumn
@@ -74,6 +74,12 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
       let newColor = action.newColor == action.card.backgroundColor ? '' : action.newColor;
       draft[columnIndex].cards[cardIndex].backgroundColor = newColor;
+      break;
+    }
+    case 'deleteCard': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      draft[columnIndex].cards.splice(cardIndex, 1);
       break;
     }
     case 'toggleCardLabel': {

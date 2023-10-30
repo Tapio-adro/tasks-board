@@ -19,13 +19,13 @@ export type Card = {
 export type BoardColumnsAction =
   | { type: 'addColumn'; title: string }
   | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
-  | { type: 'deleteColumn'; id: string }
+  | { type: 'deleteColumn'; boardColumn: BoardColumn }
   | { type: 'addCard'; boardColumn: BoardColumn; title: string }
   | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
   | { type: 'changeCardBackgroundColor'; boardColumn: BoardColumn; card: Card; newColor: string }
+  | { type: 'deleteCard'; boardColumn: BoardColumn; card: Card }
   | { type: 'toggleCardLabel'; boardColumn: BoardColumn; card: Card; label: Label }
   | { type: 'removeLabelFromAllCards'; label: Label }
-
 
 export type BoardData = {
   backgroundColors: string[];

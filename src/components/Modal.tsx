@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from 'react';
+import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
 interface BackgroundProps {
@@ -8,7 +9,7 @@ interface BackgroundProps {
 }
 
 const Background = styled.div<BackgroundProps>`
-  display: ${(props) => (props.$isOpen ? 'block' : 'none')};
+  display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -16,7 +17,6 @@ const Background = styled.div<BackgroundProps>`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 1;
-  display: flex;
   overflow-y: auto;
   overflow-x: hidden;
   cursor: auto;
@@ -55,7 +55,7 @@ const Modal: React.FC<ModalProps> = ({
   transparentBackground = false,
   isCentered = false,
 }) => {
-  return (
+  return ReactDOM.createPortal(
     <Background
       $isCentered={isCentered}
       $isOpen={isOpen}
@@ -65,7 +65,8 @@ const Modal: React.FC<ModalProps> = ({
       <ModalContent onClick={(e) => e.stopPropagation()}>
         {children}
       </ModalContent>
-    </Background>
+    </Background>,
+    document.getElementById('root') as HTMLElement
   );
 };
 

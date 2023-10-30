@@ -5,6 +5,8 @@ import RenamableField from './RenamableField';
 import { XMark } from '../assets/shared/sharedComponents';
 import CardComponent from './CardComponent';
 import AddBoardElementButton from './AddBoardElementButton';
+import { useState } from 'react';
+import DeleteModal from './DeleteModal';
 
 
 const StyledBoardColumn = styled.div`
@@ -38,19 +40,20 @@ const CardsContainer = styled.div`
 `;
 
 export default function BoardColumnComponent(column: BoardColumn) {
-  const dispatch = useBoardColumnsDispatch();
+  const boardColumnsDispatch = useBoardColumnsDispatch();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
   function renameBoardColumn(newTitle: string) {
-    dispatch({
+    boardColumnsDispatch({
       type: "renameColumn",
       boardColumn: column,
       newTitle
     })
   }
   function removeBoardColumn(id: string) {
-    dispatch({
+    boardColumnsDispatch({
       type: 'deleteColumn',
-      id: id
+      boardColumn: column
     })
   }
 
@@ -66,13 +69,21 @@ export default function BoardColumnComponent(column: BoardColumn) {
             fieldValue={column.title}
             onFieldValueChange={renameBoardColumn}
           />
-          <XMark onClick={() => removeBoardColumn(column.id)}/>
+          <XMark onClick={() => setIsDeleteModalOpen(true)}/>
         </BoardColumnTitle>
         <CardsContainer>
           {cardsList}
           <AddBoardElementButton elementType='card' boardColumn={column} />
         </CardsContainer>
       </StyledBoardColumn>
+      
+     <DeleteModal
+        headerText='Delete column'
+        descriptionText='Confirm deletion of this column'
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={() => removeBoardColumn(column.id)}
+      />
     </>
   )
 }

@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import LabelEditor, { LabelEditorMode } from './LabelEditor';
 import { getInitialLabel } from '../assets/scripts/objectsGenerator';
+import DeleteModal from './DeleteModal';
 
 interface ColorButtonProps {
   readonly $color: string;
@@ -31,6 +32,9 @@ const EditorContent = styled.div`
 const EditorHalf = styled.div`
   flex: 1;
   min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 const EditorSection = styled.section`
   background-color: #fff;
@@ -145,8 +149,9 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
   const [labelEditorMode, setLabelEditorMode] = useState<LabelEditorMode>('create');
   const [currentLabelId, setCurrentLabelId] = useState<string>('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
-  useHotkeys('esc', () => props.onClose(), {enabled: !isLabelEditorOpen});
+  useHotkeys('esc', () => props.onClose(), {enabled: !isAnyModalOpen()});
 
   function changeCardBackgroundColor(color: string) {
     boardColumnsDispatch({
@@ -174,6 +179,16 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       label
     });
   }
+  function deleteCard() {
+    boardColumnsDispatch({
+      type: 'deleteCard',
+      boardColumn: column,
+      card
+    });
+  }
+  function isAnyModalOpen() {
+    return isLabelEditorOpen || isDeleteModalOpen;
+  }
 
   const colorButtons = boardData?.backgroundColors.map((color) => {
     return (
@@ -192,7 +207,7 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
           onClick={() => handleLabelClick(label)}
         >
           <LabelCheckbox type='checkbox'
-            checked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
+            defaultChecked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
           />
           <LabelTitle $backgroundColor={label.color}>{label.title}</LabelTitle>
         </LabelContent>
@@ -222,6 +237,12 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
                 Reset color
               </GreyButton>
             </EditorSection>
+            <EditorSection>
+              <GreyButton
+                $isActive={true}
+                onClick={() => setIsDeleteModalOpen(true)}
+              >Delete card</GreyButton>
+            </EditorSection>
           </EditorHalf>
           <EditorHalf>
             <EditorSection>
@@ -234,16 +255,22 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
             </EditorSection>
           </EditorHalf>
         </EditorContent>
-
       </CardEditor>
-      {isLabelEditorOpen && (
-        <LabelEditor
-          editorMode={labelEditorMode}
-          isOpen={isLabelEditorOpen}
-          onClose={() => setIsLabelEditorOpen(false)}
-          labelId={currentLabelId}
-        />
-      )}
+
+      <LabelEditor
+        editorMode={labelEditorMode}
+        isOpen={isLabelEditorOpen}
+        onClose={() => setIsLabelEditorOpen(false)}
+        labelId={currentLabelId}
+      />
+
+      <DeleteModal
+        headerText='Delete card'
+        descriptionText='Confirm deletion of this card'
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={() => deleteCard()}
+      />
     </>
   );
 };
