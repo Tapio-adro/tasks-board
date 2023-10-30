@@ -15,6 +15,7 @@ const StyledBoardColumn = styled.div`
   /* padding: 8px; */
   box-shadow: ${(props) => props.theme.boxShadow};
   cursor: pointer;
+  margin: 0 5px;
 `;
 const BoardColumnTitle = styled.div`
   width: 100%;
@@ -39,7 +40,14 @@ const CardsContainer = styled.div`
   row-gap: 8px;
 `;
 
-export default function BoardColumnComponent(column: BoardColumn) {
+
+interface Props {
+  column: BoardColumn;
+  provided: any;
+  snapshot: any;
+}
+
+export default function BoardColumnComponent({column, ...props}: Props) {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
@@ -63,7 +71,11 @@ export default function BoardColumnComponent(column: BoardColumn) {
   
   return (
     <>
-      <StyledBoardColumn>
+      <StyledBoardColumn
+        ref={props.provided.innerRef}
+        {...props.provided.draggableProps}
+        {...props.provided.dragHandleProps}
+      >
         <BoardColumnTitle>
           <RenamableField
             fieldValue={column.title}

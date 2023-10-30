@@ -51,6 +51,11 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[columnIndex].title = newTitle;
       break;
     }
+    case 'reorderColumns': {
+      const [removed] = draft.splice(action.startIndex, 1);
+      draft.splice(action.endIndex, 0, removed);
+      break;
+    }
     case 'deleteColumn': {
       return draft.filter((column) => column.id !== action.boardColumn.id);
     }

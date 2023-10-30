@@ -19,6 +19,7 @@ export type Card = {
 export type BoardColumnsAction =
   | { type: 'addColumn'; title: string }
   | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
+  | { type: 'reorderColumns'; startIndex: number; endIndex: number }
   | { type: 'deleteColumn'; boardColumn: BoardColumn }
   | { type: 'addCard'; boardColumn: BoardColumn; title: string }
   | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
