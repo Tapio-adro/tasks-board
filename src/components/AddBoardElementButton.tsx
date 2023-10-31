@@ -30,7 +30,7 @@ const AddElementWrapper = styled.div<AddElementWrapperProps>`
   position: relative;
   overflow: hidden;
   border-radius: 8px;
-  margin: 0 4px;
+  margin: 0 5px;
   width: 300px;
   &:hover {
     background-color: #96969616;

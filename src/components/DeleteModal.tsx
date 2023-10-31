@@ -50,8 +50,9 @@ interface DeleteModalProps {
   onDelete: Function;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onDelete, ...props }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, ...props }) => {
   useHotkeys('esc', () => props.onClose());
+  useHotkeys('enter', () => props.onDelete());
 
   return (
     <Modal isOpen={isOpen} onClose={props.onClose} isCentered={true}>
@@ -62,7 +63,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onDelete, ...props })
           <XMark onClick={() => props.onClose()} noMarginLeft={true}/>
         </TitleWrapper>
         <Text>{props.descriptionText}</Text>
-        <DeleteButton onClick={() => onDelete()}>Delete</DeleteButton>
+        <DeleteButton onClick={() => props.onDelete()}>Delete</DeleteButton>
       </StyledDeleteModal>
     </Modal>
   );

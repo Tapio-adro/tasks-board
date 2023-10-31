@@ -26,15 +26,12 @@ const BoardTitle = styled.div`
 `;
 const ColumnsContainer = styled.div`
   display: flex;
-  /* align-items: flex-start; */
-  /* justify-content: stretch; */
+  align-items: flex-start;
+  /* : stretch; */
+  
   padding: 10px 5px;
   overflow-x: auto;
   height: calc(100vh - 50px);
-  >div {
-    flex: 0 0 auto;
-    width: 300px;
-  }
 `;
 
 

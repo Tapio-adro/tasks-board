@@ -12,12 +12,13 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const StyledBoardColumn = styled.div`
   margin: 0 5px;
-  flex: 1;
   display: flex;
   flex-direction: column;
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
   overflow: hidden;
+  min-width: 300px;
+  align-self: stretch;
 `;
 const BoardColumnTitle = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -140,13 +141,15 @@ export default function BoardColumnComponent({column, ...props}: Props) {
         </CardsContainer> */}
       </StyledBoardColumn>
       
-     <DeleteModal
-        headerText='Delete column'
-        descriptionText='Confirm deletion of this column'
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onDelete={() => removeBoardColumn(column.id)}
-      />
+      {isDeleteModalOpen &&
+        <DeleteModal
+          headerText='Delete column'
+          descriptionText='Confirm deletion of this column'
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onDelete={() => removeBoardColumn(column.id)}
+        />
+      }
     </>
   )
 }

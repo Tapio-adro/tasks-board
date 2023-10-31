@@ -76,6 +76,7 @@ const GreyButton = styled.button<GreyButtonProps>`
   padding: 8px;
   text-align: center;
   font-weight: 500;
+  height: 32px;
   &:hover {
     background-color: #091e4224;
   }
@@ -83,6 +84,12 @@ const GreyButton = styled.button<GreyButtonProps>`
     opacity: 0.5;
     pointer-events: none; 
   `};
+`;
+const DeleteButton = styled(GreyButton)`
+  &:hover {
+    color: #fff;
+    background-color: #C9372C;
+  }
 `;
 const LabelsContainer = styled.div`
   display: flex;
@@ -97,7 +104,7 @@ const LabelWrapper = styled.div`
   display: flex;
   align-items: stretch;
 `;
-const LabelContent = styled.button`
+const LabelContent = styled.div`
   display: flex;
   align-items: stretch;
   flex: 1;
@@ -108,7 +115,7 @@ const LabelCheckbox = styled.input`
   margin-left: 2px;
   cursor: pointer;
 `;
-const LabelTitle = styled.div<LabelTitleProps>`
+const LabelTitle = styled.button<LabelTitleProps>`
   flex: 1;
   background-color: ${props => props.$backgroundColor};
   border-radius: 4px;
@@ -149,7 +156,7 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
   const [labelEditorMode, setLabelEditorMode] = useState<LabelEditorMode>('create');
   const [currentLabelId, setCurrentLabelId] = useState<string>('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
   useHotkeys('esc', () => props.onClose(), {enabled: !isAnyModalOpen()});
 
@@ -187,7 +194,8 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
     });
   }
   function isAnyModalOpen() {
-    return isLabelEditorOpen || isDeleteModalOpen;
+    // return isLabelEditorOpen || isDeleteModalOpen;
+    return isLabelEditorOpen;
   }
 
   const colorButtons = boardData?.backgroundColors.map((color) => {
@@ -203,13 +211,15 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
   const labels = boardData?.labels.map((label) => {
     return (
       <LabelWrapper key={label.id}>
-        <LabelContent
-          onClick={() => handleLabelClick(label)}
-        >
+        <LabelContent>
           <LabelCheckbox type='checkbox'
-            defaultChecked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
+            checked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
+            onChange={() => handleLabelClick(label)}
           />
-          <LabelTitle $backgroundColor={label.color}>{label.title}</LabelTitle>
+          <LabelTitle
+            $backgroundColor={label.color} 
+            onClick={() => handleLabelClick(label)}
+          >{label.title}</LabelTitle>
         </LabelContent>
         <LabelEditButton
           onClick={() => editLabel(label)}
@@ -238,10 +248,10 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
               </GreyButton>
             </EditorSection>
             <EditorSection>
-              <GreyButton
+              <DeleteButton
                 $isActive={true}
-                onClick={() => setIsDeleteModalOpen(true)}
-              >Delete card</GreyButton>
+                onClick={() => deleteCard()}
+              >Delete card</DeleteButton>
             </EditorSection>
           </EditorHalf>
           <EditorHalf>
@@ -264,13 +274,13 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
         labelId={currentLabelId}
       />
 
-      <DeleteModal
+      {/* <DeleteModal
         headerText='Delete card'
         descriptionText='Confirm deletion of this card'
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onDelete={() => deleteCard()}
-      />
+      /> */}
     </>
   );
 };
