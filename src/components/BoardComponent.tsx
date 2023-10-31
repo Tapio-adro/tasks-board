@@ -26,14 +26,14 @@ const BoardTitle = styled.div`
 `;
 const ColumnsContainer = styled.div`
   display: flex;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  /* justify-content: stretch; */
   padding: 10px 5px;
   overflow-x: auto;
   height: calc(100vh - 50px);
   >div {
     flex: 0 0 auto;
     width: 300px;
-    border-radius: 12px;
   }
 `;
 
@@ -43,27 +43,27 @@ export default function BoardComponent () {
   const boardColumns = useBoardColumns();
   const boardColumnsDispatch = useBoardColumnsDispatch();
 
-  function reorderColumns<BoardColumn>(
-    list: BoardColumn[],
-    startIndex: number,
-    endIndex: number
-  ): BoardColumn[] {
-    const result: BoardColumn[] = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
 
-    return result;
-  }
   function onDragEnd(result: any) {
+    console.log(result.type);
+    console.log(result);
     if (!result.destination) {
       return;
     }
 
-    boardColumnsDispatch({
-      type: 'reorderColumns',
-      startIndex: result.source.index,
-      endIndex: result.destination.index
-    });
+    if (result.type === 'COLUMN') {
+      boardColumnsDispatch({
+        type: 'moveColumn',
+        startIndex: result.source.index,
+        endIndex: result.destination.index
+      });
+    } else {
+      boardColumnsDispatch({
+        type: 'moveCard',
+        source: result.source,
+        destination: result.destination
+      });
+    }
   };
   
 
@@ -94,7 +94,7 @@ export default function BoardComponent () {
         />
       </BoardTitle>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable" direction="horizontal">
+        <Droppable droppableId="board" type="COLUMN" direction="horizontal">
           {(provided, snapshot) => (
             <ColumnsContainer
               {...provided.droppableProps}

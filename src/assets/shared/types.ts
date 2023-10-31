@@ -19,11 +19,12 @@ export type Card = {
 export type BoardColumnsAction =
   | { type: 'addColumn'; title: string }
   | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
-  | { type: 'reorderColumns'; startIndex: number; endIndex: number }
+  | { type: 'moveColumn'; startIndex: number; endIndex: number }
   | { type: 'deleteColumn'; boardColumn: BoardColumn }
   | { type: 'addCard'; boardColumn: BoardColumn; title: string }
   | { type: 'renameCard'; boardColumn: BoardColumn; card: Card; newTitle: string }
   | { type: 'changeCardBackgroundColor'; boardColumn: BoardColumn; card: Card; newColor: string }
+  | { type: 'moveCard'; source: any; destination: any }
   | { type: 'deleteCard'; boardColumn: BoardColumn; card: Card }
   | { type: 'toggleCardLabel'; boardColumn: BoardColumn; card: Card; label: Label }
   | { type: 'removeLabelFromAllCards'; label: Label }

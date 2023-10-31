@@ -29,13 +29,17 @@ const AddElementWrapper = styled.div<AddElementWrapperProps>`
   padding: 8px;
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 8px;
+  margin: 0 4px;
+  width: 300px;
   &:hover {
     background-color: #96969616;
   }
   ${props => {
     if (props.$elementType == 'card') {
       return css`
+        width: auto;
+        margin: 0 8px;
         border-radius: 8px;
         padding: 0 8px;
         height: 30px;

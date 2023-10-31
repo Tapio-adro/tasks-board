@@ -17,8 +17,8 @@ interface LabelProps {
 }
 
 const StyledCard = styled.div<StyledCardProps>`
-  width: 100%;
   padding: 8px 12px;
+  margin: 0 8px 8px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: ${(props) => props.theme.boxShadow};
@@ -113,9 +113,11 @@ const Label = styled.button<LabelProps>`
 interface CardComponentProps {
   column: BoardColumn;
   card: Card;
+  provided: any;
+  snapshot: any;
 }
 
-export default function CardComponent({column, card}: CardComponentProps) {
+export default function CardComponent({column, card, ...props}: CardComponentProps) {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
@@ -167,6 +169,9 @@ export default function CardComponent({column, card}: CardComponentProps) {
   return (
     <>
       <StyledCard
+        ref={props.provided.innerRef}
+        {...props.provided.draggableProps}
+        {...props.provided.dragHandleProps}
         $backgroundColor={card.backgroundColor}
         onContextMenu={handleCardContextMenu}
       >

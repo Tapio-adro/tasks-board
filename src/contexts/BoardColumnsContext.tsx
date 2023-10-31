@@ -11,7 +11,14 @@ const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnsAction>>(() => {});
 const initialBoardColumn = getInitialBoardColumn();
 initialBoardColumn.cards.push(getInitialCard());
-const initialBoardColumns = [initialBoardColumn];
+initialBoardColumn.cards.push(getInitialCard());
+const initialBoardColumn1 = getInitialBoardColumn();
+initialBoardColumn1.cards.push(getInitialCard());
+initialBoardColumn1.cards.push(getInitialCard());
+const initialBoardColumn2 = getInitialBoardColumn();
+initialBoardColumn2.cards.push(getInitialCard());
+initialBoardColumn2.cards.push(getInitialCard());
+const initialBoardColumns = [initialBoardColumn, initialBoardColumn1, initialBoardColumn2];
 
 
 export function BoardColumnsProvider({ children }: Props) {
@@ -51,7 +58,7 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[columnIndex].title = newTitle;
       break;
     }
-    case 'reorderColumns': {
+    case 'moveColumn': {
       const [removed] = draft.splice(action.startIndex, 1);
       draft.splice(action.endIndex, 0, removed);
       break;
@@ -79,6 +86,13 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
       let newColor = action.newColor == action.card.backgroundColor ? '' : action.newColor;
       draft[columnIndex].cards[cardIndex].backgroundColor = newColor;
+      break;
+    }
+    case 'moveCard': {
+      const sourceColumnIndex = getColumnIndexById(draft, action.source.droppableId);
+      const destinationColumnIndex = getColumnIndexById(draft, action.destination.droppableId);
+      const [removed] = draft[sourceColumnIndex].cards.splice(action.source.index, 1);
+      draft[destinationColumnIndex].cards.splice(action.destination.index, 0, removed);
       break;
     }
     case 'deleteCard': {

@@ -7,17 +7,20 @@ import CardComponent from './CardComponent';
 import AddBoardElementButton from './AddBoardElementButton';
 import { useState } from 'react';
 import DeleteModal from './DeleteModal';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 
 const StyledBoardColumn = styled.div`
-  width: 100%;
-  background-color: ${(props) => props.theme.colors.bgColor};
-  /* padding: 8px; */
-  box-shadow: ${(props) => props.theme.boxShadow};
-  cursor: pointer;
   margin: 0 5px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  overflow: hidden;
 `;
 const BoardColumnTitle = styled.div`
+  background-color: ${(props) => props.theme.colors.bgColor};
   width: 100%;
   display: flex;
   align-items: center;
@@ -33,11 +36,16 @@ const BoardColumnTitle = styled.div`
     flex: 1;
   }
 `;
+const CardsWrapper = styled.div`
+  flex: 1;
+`;
 const CardsContainer = styled.div`
-  padding: 0 8px 8px;
+  padding: 0 0 8px;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  background-color: ${(props) => props.theme.colors.bgColor};
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
 `;
 
 
@@ -64,9 +72,37 @@ export default function BoardColumnComponent({column, ...props}: Props) {
       boardColumn: column
     })
   }
+  function onDragEnd(result: any) {
+    if (!result.destination) {
+      return;
+    }
 
-  const cardsList = column.cards?.map((card) => {
-    return (<CardComponent key={card.id} {...{column, card}} />)
+    // boardColumnsDispatch({
+    //   type: 'moveCard',
+    //   startColumn: column,
+    //   endColumn: 
+    //   startIndex: result.source.index,
+    //   endIndex: result.destination.index
+    // });
+  };
+
+  const cardsList = column.cards?.map((card, index) => {
+    return (
+      <Draggable
+        key={card.id}
+        draggableId={card.id}
+        index={index}
+      >
+        {(provided, snapshot) => (
+          <CardComponent 
+            column={column} 
+            card={card}
+            provided={provided}
+            snapshot={snapshot}
+          />
+        )}
+      </Draggable>  
+    )
   });
   
   return (
@@ -74,19 +110,34 @@ export default function BoardColumnComponent({column, ...props}: Props) {
       <StyledBoardColumn
         ref={props.provided.innerRef}
         {...props.provided.draggableProps}
-        {...props.provided.dragHandleProps}
       >
-        <BoardColumnTitle>
+        <BoardColumnTitle
+          {...props.provided.dragHandleProps}
+        >
           <RenamableField
             fieldValue={column.title}
             onFieldValueChange={renameBoardColumn}
           />
           <XMark onClick={() => setIsDeleteModalOpen(true)}/>
         </BoardColumnTitle>
-        <CardsContainer>
+        <Droppable droppableId={column.id} type='CARD' direction='vertical'>
+          {(provided, snapshot) => (
+            <CardsWrapper
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              <CardsContainer>
+                {cardsList}
+                {provided.placeholder}
+                <AddBoardElementButton elementType='card' boardColumn={column} />
+              </CardsContainer>
+            </CardsWrapper>
+          )}
+        </Droppable>
+        {/* <CardsContainer>
           {cardsList}
           <AddBoardElementButton elementType='card' boardColumn={column} />
-        </CardsContainer>
+        </CardsContainer> */}
       </StyledBoardColumn>
       
      <DeleteModal
