@@ -132,7 +132,7 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
       setCurrentLabel(getInitialLabel());
     }
     inputRef.current?.focus();
-  }, []);
+  }, [isOpen]);
   
   useHotkeys('esc', () => props.onClose(), {enableOnFormTags: true});
   useHotkeys('enter', () => handleConfirmButtonClick(), {enableOnFormTags: true});
@@ -178,7 +178,6 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
   }
   function handleDeleteConfirmation() {
     setIsConfirmingDeletion(false);
-    props.onClose();
     boardColumnsDispatch({
       type: 'removeLabelFromAllCards',
       label: currentLabel,
@@ -187,6 +186,7 @@ const LabelEditor: React.FC<LabelEditorProps> = ({
       type: 'deleteLabel',
       label: currentLabel,
     });
+    props.onClose();
   }
   
   const colorButtons = boardData?.backgroundColors.map((color) => {

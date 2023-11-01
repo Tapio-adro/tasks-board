@@ -28,7 +28,6 @@ const CardEditorTitle = styled.div`
   display: flex;
   align-items: center;
   color: ${(props) => props.theme.colors.titleText};
-  margin-bottom: 12px;
   input, .title {
     font-weight: bold;
     font-size: 20px;
@@ -45,6 +44,14 @@ const ColoredBar = styled.div<ColoredBarProps>`
   ${props => props.$backgroundColor != '' && css`
     height: 50px;
   `}; 
+`;
+const ColumnInfo = styled.div`
+  color: ${(props) => props.theme.colors.titleText};
+  margin-left: 6px;
+  margin-bottom: 16px;
+  span {
+    text-decoration: underline;
+  }
 `;
 
 export interface CardEditorProps {
@@ -83,6 +90,7 @@ const CardEditor: React.FC<CardEditorProps> = ({ column, card, children, ...prop
               />
             <XMark onClick={() => props.onClose()}/>
           </CardEditorTitle>
+          <ColumnInfo>in column <span>{column.title}</span></ColumnInfo>
           {children}
         </StyledCardEditor>
         <ColoredBar $backgroundColor={card.backgroundColor} />

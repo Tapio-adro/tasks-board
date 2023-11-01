@@ -44,7 +44,7 @@ const EditorSection = styled.section`
   padding: 12px;
 `;
 const SectionTitle = styled.div`
-  color: ${(props) => props.theme.colors.buttonGrayText};
+  color: ${(props) => props.theme.colors.buttonGreyText};
   text-align: center;
   font-size: 16px;
   padding: 4px 0px 4px;
@@ -139,7 +139,7 @@ const LabelEditButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.colors.buttonGrayText};
+  color: ${(props) => props.theme.colors.buttonGreyText};
 `;
 
 

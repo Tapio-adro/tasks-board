@@ -15,8 +15,8 @@ const theme: DefaultTheme = {
   colors: {
     bgColor: '#f1f2f4',
     titleText: '#172b4d',
-    buttonGrayText: '#44546f',
-    buttonGrayHoverBg: '#8d8d8d28',
+    buttonGreyText: '#44546f',
+    buttonGreyHoverBg: '#8d8d8d28',
     // : '',
   },
   boxShadow: 'var(--ds-shadow-raised,0 1px 1px #091e4240,0 0 1px #091e424f)',

@@ -12,11 +12,11 @@ const StyledXMark = styled.button<StyledXMarkProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.colors.buttonGrayText};
+  color: ${(props) => props.theme.colors.buttonGreyText};
   margin-left: 4px;
   border-radius: 4px;
   &:hover {
-    background-color: ${(props) => props.theme.colors.buttonGrayHoverBg};
+    background-color: ${(props) => props.theme.colors.buttonGreyHoverBg};
   }
   svg {
     font-weight: normal;
@@ -32,10 +32,10 @@ const StyledIconButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.colors.buttonGrayText};
+  color: ${(props) => props.theme.colors.buttonGreyText};
   border-radius: 4px;
   &:hover {
-    background-color: ${(props) => props.theme.colors.buttonGrayHoverBg};
+    background-color: ${(props) => props.theme.colors.buttonGreyHoverBg};
   }
   svg {
     font-weight: normal;

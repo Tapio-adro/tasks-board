@@ -63,10 +63,10 @@ const EditTitleButton = styled.button<StyledCardProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.colors.buttonGrayText};
+  color: ${(props) => props.theme.colors.buttonGreyText};
   opacity: 0;
   &:hover {
-    background-color: ${(props) => props.theme.colors.buttonGrayHoverBg};
+    background-color: ${(props) => props.theme.colors.buttonGreyHoverBg};
   }
   ${StyledCard}:hover & {
     opacity: 1;
