@@ -11,14 +11,7 @@ const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnsAction>>(() => {});
 const initialBoardColumn = getInitialBoardColumn();
 initialBoardColumn.cards.push(getInitialCard());
-initialBoardColumn.cards.push(getInitialCard());
-const initialBoardColumn1 = getInitialBoardColumn();
-initialBoardColumn1.cards.push(getInitialCard());
-initialBoardColumn1.cards.push(getInitialCard());
-const initialBoardColumn2 = getInitialBoardColumn();
-initialBoardColumn2.cards.push(getInitialCard());
-initialBoardColumn2.cards.push(getInitialCard());
-const initialBoardColumns = [initialBoardColumn, initialBoardColumn1, initialBoardColumn2];
+const initialBoardColumns = [initialBoardColumn];
 
 
 export function BoardColumnsProvider({ children }: Props) {

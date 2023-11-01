@@ -7,6 +7,7 @@ import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import { useEffect, useRef, useState } from 'react';
 import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext';
 import AppearanceEditor from './AppearanceEditor';
+import ContentEditor from './ContentEditor';
 
 
 interface StyledCardProps {
@@ -63,7 +64,7 @@ const EditTitleButton = styled.button<StyledCardProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.colors.buttonGreyText};
+  color: ${(props) => props.theme.colors.titleTextSubtle};
   opacity: 0;
   &:hover {
     background-color: ${(props) => props.theme.colors.buttonGreyHoverBg};
@@ -121,6 +122,7 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
+  const [isContentEditorOpen, setIsContentEditorOpen] = useState(true);
   const boardData = useBoardData();
   const boardDataDispatch = useBoardDataDispatch();
 
@@ -147,10 +149,17 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
   function closeAppearanceEditor() {
     setIsAppearanceEditorOpen(false);
   }
-  function toggleCardLabelsExpand() {
+  function handleLabelClick(e) {
+    e.stopPropagation();
     boardDataDispatch({
       type: 'toggleCardLabelsExpand',
     });
+  }
+  function handleCardClick() {
+    setIsContentEditorOpen(true);
+  }
+  function closeContentEditor() {
+    setIsContentEditorOpen(false);
   }
 
   const labels = card.labels.map((label) => {
@@ -158,7 +167,7 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
       <Label
         key={label.id}
         style={{backgroundColor: label.color}}
-        onClick={toggleCardLabelsExpand}
+        onClick={handleLabelClick}
         $isExpanded={boardData?.areCardLabelsExpanded ?? false}
       >
         {boardData?.areCardLabelsExpanded && label.title}
@@ -174,6 +183,7 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
         {...props.provided.dragHandleProps}
         $backgroundColor={card.backgroundColor}
         onContextMenu={handleCardContextMenu}
+        onClick={handleCardClick}
       >
         <Labels
           $backgroundColor={card.backgroundColor}
@@ -206,6 +216,12 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
         column={column}
         isOpen={isAppearanceEditorOpen}
         onClose={closeAppearanceEditor}
+      />}
+      {isContentEditorOpen && <ContentEditor
+        card={card}
+        column={column}
+        isOpen={isContentEditorOpen}
+        onClose={closeContentEditor}
       />}
     </>
   )

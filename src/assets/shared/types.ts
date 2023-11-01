@@ -49,4 +49,4 @@ export type BoardDataAction =
   | { type: 'toggleCardLabelsExpand' }
 
 
-export type BoardElementType = 'boardColumn' | 'card'
+export type ElementType = 'boardColumn' | 'card' | 'text' | 'checklist'

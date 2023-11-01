@@ -46,7 +46,7 @@ const ColoredBar = styled.div<ColoredBarProps>`
   `}; 
 `;
 const ColumnInfo = styled.div`
-  color: ${(props) => props.theme.colors.titleText};
+  color: ${(props) => props.theme.colors.titleTextSubtle};
   margin-left: 6px;
   margin-bottom: 16px;
   span {

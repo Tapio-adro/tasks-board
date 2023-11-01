@@ -2,7 +2,7 @@ import { rgba } from 'polished';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useBoardColumns, useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
-import AddBoardElementButton from './AddBoardElementButton';
+import AddElementButton from './AddElementButton';
 import BoardColumnComponent from './BoardColumnComponent';
 import RenamableField from './RenamableField';
 import Modal from './Modal';
@@ -99,7 +99,7 @@ export default function BoardComponent () {
             >
               {boardColumnsList}
               {provided.placeholder}
-              <AddBoardElementButton elementType="boardColumn" />
+              <AddElementButton elementType="boardColumn" />
             </ColumnsContainer>
           )}
         </Droppable>

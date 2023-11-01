@@ -4,7 +4,7 @@ import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
 import RenamableField from './RenamableField';
 import { XMark } from '../assets/shared/sharedComponents';
 import CardComponent from './CardComponent';
-import AddBoardElementButton from './AddBoardElementButton';
+import AddElementButton from './AddElementButton';
 import { useState } from 'react';
 import DeleteModal from './DeleteModal';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -130,14 +130,14 @@ export default function BoardColumnComponent({column, ...props}: Props) {
               <CardsContainer>
                 {cardsList}
                 {provided.placeholder}
-                <AddBoardElementButton elementType='card' boardColumn={column} />
+                <AddElementButton elementType='card' boardColumn={column} />
               </CardsContainer>
             </CardsWrapper>
           )}
         </Droppable>
         {/* <CardsContainer>
           {cardsList}
-          <AddBoardElementButton elementType='card' boardColumn={column} />
+          <AddElementButton elementType='card' boardColumn={column} />
         </CardsContainer> */}
       </StyledBoardColumn>
       

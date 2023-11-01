@@ -15,7 +15,7 @@ const theme: DefaultTheme = {
   colors: {
     bgColor: '#f1f2f4',
     titleText: '#172b4d',
-    buttonGreyText: '#44546f',
+    titleTextSubtle: '#44546f',
     buttonGreyHoverBg: '#8d8d8d28',
     // : '',
   },
