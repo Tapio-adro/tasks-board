@@ -1,6 +1,6 @@
 *
-  font-size: 14px
-  font-family: 'Roboto', sans-serif
+  font-family: sans-serif
+  font-family: 'Roboto Flex', sans-serif
 input[type=text]
   border: 2px solid #091E4224
   border-radius: 4px
@@ -8,3 +8,52 @@ input[type=text]
     border: 2px solid #388BFF
 input[type=text]::placeholder
   font-weight: normal
+
+.text-editor-toolbar
+  border-radius: 4px
+  border: 2px solid #EBECF0
+  margin: 0
+  >div
+    display: flex
+    align-items: center
+    margin-bottom: 6px
+    flex-wrap: wrap
+.rdw-option-wrapper
+  width: 30px
+  height: 30px
+  border: none
+  border-radius: 4px
+  margin: 0 2px
+  padding: 6px
+  &.rdw-option-active
+    box-shadow: none
+    background-color: #388bff3b
+  &:hover
+    background: #091E420F
+    box-shadow: none
+.rdw-option-disabled
+  display: none
+
+.rdw-dropdown-wrapper
+  border-radius: 4px
+  margin: 0 2px
+  border: none
+  &:hover
+    background: #091E420F
+    box-shadow: none
+.rdw-dropdown-optionwrapper
+  overflow: hidden
+  box-shadow: 0 1px 1px #091e4240,0 0 1px #091e424f
+  &:hover
+    box-shadow: 0 1px 1px #091e4240,0 0 1px #091e424f
+
+.text-editor-wrapper
+
+.text-editor
+  border: 2px solid #EBECF0
+  border-top-width: 0
+  background-color: #fff
+  margin: 0
+  padding: 8px 20px
+  // font-weight: 500
+  color: #172b4d

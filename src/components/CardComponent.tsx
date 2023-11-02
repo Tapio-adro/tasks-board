@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext';
 import AppearanceEditor from './AppearanceEditor';
 import ContentEditor from './ContentEditor';
+import { Editor } from 'react-draft-wysiwyg';
 
 
 interface StyledCardProps {
@@ -43,6 +44,7 @@ const CardTitle = styled.div<StyledCardProps>`
   align-self: stretch;
   input,
   .title {
+    font-size: 14px;
     padding: 4px;
     flex: 1;
     font-weight: 400;
@@ -149,7 +151,7 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
   function closeAppearanceEditor() {
     setIsAppearanceEditorOpen(false);
   }
-  function handleLabelClick(e) {
+  function handleLabelClick(e: React.MouseEvent) {
     e.stopPropagation();
     boardDataDispatch({
       type: 'toggleCardLabelsExpand',

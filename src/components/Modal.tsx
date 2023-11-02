@@ -59,10 +59,10 @@ const Modal: React.FC<ModalProps> = ({
     <Background
       $isCentered={isCentered}
       $isOpen={isOpen}
-      onClick={() => onClose()}
+      onMouseDown={() => onClose()}
       $transparentBackground={transparentBackground}
     >
-      <ModalContent onClick={(e) => e.stopPropagation()}>
+      <ModalContent onMouseDown={(e) => e.stopPropagation()}>
         {children}
       </ModalContent>
     </Background>,

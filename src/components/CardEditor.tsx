@@ -29,7 +29,7 @@ const CardEditorTitle = styled.div`
   align-items: center;
   color: ${(props) => props.theme.colors.titleText};
   input, .title {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 20px;
     padding: 4px;
     flex: 1;
@@ -46,6 +46,7 @@ const ColoredBar = styled.div<ColoredBarProps>`
   `}; 
 `;
 const ColumnInfo = styled.div`
+  font-size: 14px;
   color: ${(props) => props.theme.colors.titleTextSubtle};
   margin-left: 6px;
   margin-bottom: 16px;

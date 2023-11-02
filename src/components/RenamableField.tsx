@@ -95,13 +95,20 @@ const RenamableField = forwardRef<RenamableFieldHandle, RenamableFieldProps>((
   
   if (showInput) {
     return (
-      <OutsideClickHandler 
+      <OutsideClickHandler
         onOutsideClick={checkChange}
         disabled={!outsideClickEnabled}
       >
-        <StyledInput ref={inputRef} type="text" value={localFieldValue} onChange={handleLocalChange}/>
+        <StyledInput
+          ref={inputRef}
+          type="text"
+          value={localFieldValue}
+          onChange={handleLocalChange}
+          onClick={e => e.stopPropagation()}
+          onContextMenu={e => e.stopPropagation()}
+        />
       </OutsideClickHandler>
-    )
+    );
   } else {
     return (
       <TextField

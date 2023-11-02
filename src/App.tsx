@@ -19,7 +19,7 @@ const theme: DefaultTheme = {
     buttonGreyHoverBg: '#8d8d8d28',
     // : '',
   },
-  boxShadow: 'var(--ds-shadow-raised,0 1px 1px #091e4240,0 0 1px #091e424f)',
+  boxShadow: '0 1px 1px #091e4240,0 0 1px #091e424f',
 }
 
 function App() {

@@ -102,6 +102,7 @@ const StyledAddElementButton = styled.button<StyledAddElementButtonProps>`
   width: 100%;
   cursor: pointer;
   flex-grow: 1;
+  font-size: 14px;
 
   ${props => props.$elementType == 'boardColumn' && css`
     color: #fff;
@@ -116,6 +117,7 @@ const StyledAddElementButton = styled.button<StyledAddElementButtonProps>`
   `};
   ${props => (props.$elementType == 'text' || props.$elementType == 'checklist') && css`
     color: ${(props) => props.theme.colors.titleText};
+    font-weight: 500;
     height: 32px;
     padding-left: 12px;
   `};
@@ -143,6 +145,7 @@ const ConfirmButton = styled.button`
   padding: 4px 8px;
   color: #fff;
   border-radius: 4px;
+  font-size: 14px;
   &:hover {
     opacity: 0.8;
   }

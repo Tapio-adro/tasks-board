@@ -41,6 +41,7 @@ const LabelTitleInput = styled.input`
   margin-top: 12px;
   padding: 4px;
   margin-bottom: 12px;
+  font-size: 14px;
 `;
 const ColorButtonsContainer = styled.div`
   display: grid;
@@ -65,6 +66,7 @@ const BottomButtonsContainer = styled.div`
   justify-content: space-between;
 `;
 const ConfirmButton = styled.button`
+  font-size: 14px;
   color: #fff;
   background-color: #0C66E4;
   border-radius: 4px;

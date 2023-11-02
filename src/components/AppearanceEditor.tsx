@@ -77,6 +77,7 @@ const GreyButton = styled.button<GreyButtonProps>`
   text-align: center;
   font-weight: 500;
   height: 32px;
+  font-size: 14px;
   &:hover {
     background-color: #091e4224;
   }
@@ -123,6 +124,7 @@ const LabelTitle = styled.button<LabelTitleProps>`
   align-items: center;
   color: #533f04;
   padding: 12px;
+  font-size: 14px;
   &:hover {
     opacity: 0.9;
   }
