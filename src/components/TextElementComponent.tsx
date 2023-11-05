@@ -99,6 +99,19 @@ const TextElementComponent: React.FC<TextElementComponentProps> = ({column, card
   };
 
   useEffect(() => {
+    if (textElement.isJustCreated) {
+      startEditing();
+      editorRef.current?.focusEditor();
+
+      boardColumnsDispatch({
+        type: 'disableCardElementJustCreated',
+        boardColumn: column,
+        card: card,
+        element: textElement,
+      });
+    }
+  }, [])
+  useEffect(() => {
     editorRef.current?.focusEditor();
   }, [textElement.isEditorActive])
 

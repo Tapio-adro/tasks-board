@@ -20,17 +20,19 @@ export type Card = {
 
 export type CardElement = TextElement | ChecklistElement
 
-export type TextElement = {
+type commonElementProps = {
   title: string;
   id: string;
-  type: 'text';
-  isEditorActive: boolean;
-  text: string;
+  isJustCreated: boolean;
 }
 
-export type ChecklistElement = {
-  title: string;
-  id: string;
+export type TextElement = commonElementProps & {
+  type: 'text';
+  text: string;
+  isEditorActive: boolean;
+}
+
+export type ChecklistElement = commonElementProps & {
   type: 'checklist';
   // items: ChecklistItem[];
 }
@@ -51,6 +53,7 @@ export type BoardColumnsAction =
   | { type: 'setTextElementEditorActiveness'; boardColumn: BoardColumn; card: Card; textElement: TextElement; isEditorActive: boolean }
   | { type: 'setTextElementText'; boardColumn: BoardColumn; card: Card; textElement: TextElement; newText: string }
   | { type: 'renameCardElement'; boardColumn: BoardColumn; card: Card; element: CardElement; newTitle: string }
+  | { type: 'disableCardElementJustCreated'; boardColumn: BoardColumn; card: Card; element: CardElement }
   | { type: 'deleteCardElement'; boardColumn: BoardColumn; card: Card; element: CardElement }
   
 

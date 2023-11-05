@@ -31,6 +31,9 @@ const Background = styled.div<BackgroundProps>`
   ${(props) => props.$isCentered && css`
     align-items: center;
   `};
+  ${(props) => !props.$isCentered && css`
+    overflow-y: scroll;
+  `};
 `;
 const ModalContent = styled.div`
   /* overflow: visible; */

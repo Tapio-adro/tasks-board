@@ -157,6 +157,14 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       element.title = action.newTitle;
       break;
     }
+    case 'disableCardElementJustCreated': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const elementIndex = getCardElementIndexById(action.card, action.element.id);
+      const element = draft[columnIndex].cards[cardIndex].elements[elementIndex];
+      element.isJustCreated = false;
+      break;
+    }
     case 'deleteCardElement': {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);

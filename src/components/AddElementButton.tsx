@@ -154,8 +154,9 @@ const ConfirmButton = styled.button`
 interface AddElementButtonProps {
   elementType: ElementType;
   boardColumn?: BoardColumn;
-  customIcon?: JSX.Element;
   card?: Card;
+  customIcon?: JSX.Element;
+  closeOnConfirm?: boolean;
 }
 
 export default function AddElementButton({
@@ -209,9 +210,7 @@ export default function AddElementButton({
   }
   function confirmAddingElement() {
     if (!isActive || inputRef.current == null || inputRef.current.value == '') {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
+      inputRef.current?.focus();
       return;
     }
 
@@ -243,6 +242,10 @@ export default function AddElementButton({
           title: inputRef.current.value,
         });
         break;
+    }
+
+    if (props.closeOnConfirm) {
+      setIsActive(false);
     }
 
     inputRef.current.value = '';

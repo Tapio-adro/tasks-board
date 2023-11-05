@@ -31,6 +31,7 @@ export function getInitialTextElement(): TextElement {
     type: 'text',
     isEditorActive: false,
     text: '',
+    isJustCreated: true,
   }
 }
 
