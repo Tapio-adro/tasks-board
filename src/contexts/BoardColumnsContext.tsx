@@ -1,6 +1,6 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
-import { BoardColumn, BoardColumnsAction } from '../assets/shared/types';
-import { getInitialBoardColumn, getInitialCard } from '../assets/scripts/objectsGenerator';
+import { BoardColumn, BoardColumnsAction, Card, TextElement } from '../assets/shared/types';
+import { getInitialBoardColumn, getInitialCard, getInitialTextElement } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
 interface Props {
@@ -88,6 +88,15 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[destinationColumnIndex].cards.splice(action.destination.index, 0, removed);
       break;
     }
+    case 'addCardTextElement': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const textElement = getInitialTextElement();
+      textElement.title = action.title;
+      card.elements.push(textElement);
+      break;
+    }
     case 'deleteCard': {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
@@ -117,6 +126,45 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       });
       break;
     }
+    case 'setTextElementEditorActiveness': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const textElementIndex = getCardElementIndexById(card, action.textElement.id);
+      const textElement = card.elements[textElementIndex];
+      if (!isTextElement(textElement)) {
+        return;
+      }
+      textElement.isEditorActive = action.isEditorActive;
+      break;
+    }
+    case 'setTextElementText': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const textElementIndex = getCardElementIndexById(action.card, action.textElement.id);
+      const textElement = draft[columnIndex].cards[cardIndex].elements[textElementIndex];
+      if (!isTextElement(textElement)) {
+        return;
+      }
+      textElement.text = action.newText;
+      break;
+    }
+    case 'renameCardElement': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const elementIndex = getCardElementIndexById(action.card, action.element.id);
+      const element = draft[columnIndex].cards[cardIndex].elements[elementIndex];
+      element.title = action.newTitle;
+      break;
+    }
+    case 'deleteCardElement': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const elementIndex = getCardElementIndexById(action.card, action.element.id);
+      card.elements.splice(elementIndex, 1);
+      break;
+    }
   }
 }
 
@@ -125,6 +173,12 @@ function getColumnIndexById(draft: BoardColumn[], id: string): number {
 }
 function getCardIndexById(column: BoardColumn, id: string): number {
   return column.cards.findIndex((card) => card.id === id);
+}
+function getCardElementIndexById(card: Card, id: string): number {
+  return card.elements.findIndex((element) => element.id === id);
+}
+function isTextElement(element: any): element is TextElement {
+  return element.type === 'text';
 }
 function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
   return draft[getColumnIndexById(draft, id)]

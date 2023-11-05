@@ -1,22 +1,163 @@
-import React, { useState } from 'react';
-import { EditorState, convertToRaw } from 'draft-js';
+import React, { useEffect, useRef, useState } from 'react';
+import { ContentState, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import styled from 'styled-components';
+import { BoardColumn, Card, TextElement } from '../assets/shared/types';
+import { useBoardColumnsDispatch } from '../contexts/BoardColumnsContext';
+import OutsideClickHandler from 'react-outside-click-handler';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import RenamableField from './RenamableField';
+import draftToMarkdown from 'draftjs-to-markdown';
 
-const StyledEditor = styled(Editor)`
-  
+
+const StyledTextElement = styled.div`
+  margin-bottom: 24px;
+`;
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  height: 32px;
+  gap: 8px;
+`;
+const Title = styled.div`
+  color: ${(props) => props.theme.colors.titleText};
+  width: 100%;
+  input, .title {
+    font-weight: 500;
+    font-size: 18px;
+    padding: 4px;
+    flex: 1;
+  }
+  >div:not(.title) {
+    flex: 1;
+  }
+`;
+const GreyButton = styled.button`
+  color: ${(props) => props.theme.colors.titleText};
+  background-color: #091e420f;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  &:hover {
+    background-color: #091e4224;
+  }
+`;
+const BottomButtonsWrapper = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  margin-left: 1px;
+`;
+const ConfirmButton = styled(GreyButton)`
+  background-color: #0C66E4;
+  font-size: 14px;
+  color: #fff;  
+  &:hover {
+    background-color: #0055cc;
+  }
+`;
+const CancelButton = styled(GreyButton)`
+  background-color: transparent;
+  font-weight: 600;
+`;
+const TextContainer = styled.div`
+  color: ${(props) => props.theme.colors.titleText};
+  cursor: pointer;
+  padding: 8px;
+`;
+const TextPlaceholder = styled.div`
+  color: ${(props) => props.theme.colors.titleText};
+  padding: 12px;
+  font-size: 14px;
+  height: 64px;
+  border-radius: 4px;
+  margin-top: 8px;
+  background-color: #091E420F;
+  cursor: pointer;
+  &:hover {
+    background-color: #091e4224;
+  }
 `;
 
-const TextElement: React.FC = () => {
+interface TextElementComponentProps {
+  column: BoardColumn;
+  card: Card;
+  textElement: TextElement;
+}
+
+const TextElementComponent: React.FC<TextElementComponentProps> = ({column, card, textElement}) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const boardColumnsDispatch = useBoardColumnsDispatch();
+  const editorRef = useRef<Editor | null>(null);
 
   const onEditorStateChange = (newEditorState: EditorState) => {
     setEditorState(newEditorState);
   };
 
-  return (
-    <div>
+  useEffect(() => {
+    editorRef.current?.focusEditor();
+  }, [textElement.isEditorActive])
+
+  function startEditing() {
+    setEditorActiveness(true);
+  }
+  function confirmEditing() {
+    const text = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        
+    boardColumnsDispatch({
+      type: 'setTextElementText',
+      boardColumn: column,
+      card: card,
+      textElement: textElement,
+      newText: text,
+    });
+    setEditorActiveness(false);
+  }
+  function cancelEditing() {
+    const contentBlocks = htmlToDraft(textElement.text).contentBlocks;
+    const contentState = ContentState.createFromBlockArray(contentBlocks)
+    setEditorState(EditorState.createWithContent(contentState));
+    setEditorActiveness(false);
+  }
+  function setEditorActiveness(isEditorActive: boolean) {
+    boardColumnsDispatch({
+      type: 'setTextElementEditorActiveness',
+      boardColumn: column,
+      card: card,
+      textElement: textElement,
+      isEditorActive: isEditorActive,
+    });
+  }
+  function renameElement(newTitle: string) {
+    boardColumnsDispatch({
+      type: 'renameCardElement',
+      boardColumn: column,
+      card: card,
+      element: textElement,
+      newTitle: newTitle,
+    });
+  }
+  function isTextEmpty() {
+    console.log(editorState.getCurrentContent().getPlainText());
+    return editorState.getCurrentContent().getPlainText().replace(/^\s*$(?:\r\n?|\n)/gm, '') === '';
+  }
+  function deleteElement() {
+    boardColumnsDispatch({
+      type: 'deleteCardElement',
+      boardColumn: column,
+      card: card,
+      element: textElement,
+    });
+  }
+  
+  const editor = textElement.isEditorActive ? (
+    <>
       <Editor
+        ref={editorRef}
         editorState={editorState}
         wrapperClassName="text-editor-wrapper"
         editorClassName="text-editor"
@@ -24,11 +165,48 @@ const TextElement: React.FC = () => {
         onEditorStateChange={onEditorStateChange}
         toolbar={getEditorToolbarOptions()}
       />
-    </div>
+      <BottomButtonsWrapper>
+        <ConfirmButton onClick={confirmEditing}>Confirm</ConfirmButton>
+        <CancelButton onClick={cancelEditing}>Cancel</CancelButton>
+      </BottomButtonsWrapper>
+    </>
+  ) : null;
+  const text = textElement.isEditorActive ? null : (
+    <>
+      {isTextEmpty() ? (
+        <TextPlaceholder onClick={startEditing}>Add some text</TextPlaceholder>
+      ) : (
+        <TextContainer onClick={startEditing}>
+          <div dangerouslySetInnerHTML={{ __html: textElement.text }} />
+        </TextContainer>
+      )}
+    </>
+  );
+
+  return (
+    <>
+      <OutsideClickHandler onOutsideClick={confirmEditing}>
+        <StyledTextElement>
+          <TitleWrapper>
+            <Title>
+              <RenamableField 
+                fieldValue={textElement.title}
+                onFieldValueChange={renameElement}
+              />
+            </Title>
+            {!textElement.isEditorActive ? (
+              <GreyButton onClick={startEditing}>Edit</GreyButton>
+            ) : (<GreyButton onClick={deleteElement}>Delete</GreyButton>)}
+          </TitleWrapper>
+          {editor}
+          {text}
+        </StyledTextElement>
+      </OutsideClickHandler>
+    </>
   );
 };
 
-export default TextElement;
+export default TextElementComponent;
 
 function getEditorToolbarOptions() {
   return {

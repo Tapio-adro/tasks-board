@@ -1,4 +1,4 @@
-import { BoardColumn, BoardData, Card, Label } from '../shared/types';
+import { BoardColumn, BoardData, Card, Label, TextElement } from '../shared/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getInitialBoardColumn(): BoardColumn {
@@ -14,6 +14,7 @@ export function getInitialCard(): Card {
     id: uuidv4(),
     backgroundColor: '',
     labels: [],
+    elements: [getInitialTextElement()],
   }
 }
 export function getInitialLabel(): Label {
@@ -21,6 +22,15 @@ export function getInitialLabel(): Label {
     title: '',
     color: '',
     id: uuidv4(),
+  }
+}
+export function getInitialTextElement(): TextElement {
+  return {
+    title: 'Text',
+    id: uuidv4(),
+    type: 'text',
+    isEditorActive: false,
+    text: '',
   }
 }
 

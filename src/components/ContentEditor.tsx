@@ -15,7 +15,7 @@ import LabelEditor, { LabelEditorMode } from './LabelEditor';
 import { getInitialLabel } from '../assets/scripts/objectsGenerator';
 import DeleteModal from './DeleteModal';
 import AddElementButton from './AddElementButton';
-import TextElement from './TextElement';
+import TextElementComponent from './TextElementComponent';
 
 interface ColorButtonProps {
   readonly $color: string;
@@ -148,6 +148,7 @@ const EditorContent = styled.div`
 `;
 const EditorElements = styled.div`
   flex: 1;
+  padding-left: 8px;
 `;
 const EditorSidebar = styled.div`
   width: 200px;
@@ -177,6 +178,22 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ column, card, ...props })
   //   return isLabelEditorOpen || isDeleteModalOpen;
   //   return isLabelEditorOpen;
   // }
+  function addTextElement(title: string) {
+    
+  }
+
+  const elementsList = card.elements.map((element, index) => {
+    if (element.type === 'text') {
+      return (
+        <TextElementComponent 
+          column={column}
+          card={card}
+          textElement={element}
+          key={index}
+        />
+      );
+    }
+  });
 
   return (
     <>
@@ -185,7 +202,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ column, card, ...props })
       >
         <EditorContent>
           <EditorElements>
-            <TextElement />
+            {elementsList}
           </EditorElements>
           <EditorSidebar>
             <EditorSidebarTitle>Add a card element</EditorSidebarTitle>

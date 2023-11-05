@@ -232,6 +232,17 @@ export default function AddElementButton({
           title: inputRef.current.value,
         });
         break;
+      case 'text':
+        if (!boardColumn || !card) {
+          break;
+        }
+        dispatch({
+          type: 'addCardTextElement',
+          boardColumn: boardColumn,
+          card: card,
+          title: inputRef.current.value,
+        });
+        break;
     }
 
     inputRef.current.value = '';
