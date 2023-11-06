@@ -20,21 +20,26 @@ export type Card = {
 
 export type CardElement = TextElement | ChecklistElement
 
-type commonElementProps = {
+type CommonElementProps = {
   title: string;
   id: string;
   isJustCreated: boolean;
 }
 
-export type TextElement = commonElementProps & {
+export type TextElement = CommonElementProps & {
   type: 'text';
   text: string;
   isEditorActive: boolean;
 }
 
-export type ChecklistElement = commonElementProps & {
+export type ChecklistElement = CommonElementProps & {
   type: 'checklist';
-  // items: ChecklistItem[];
+  items: ChecklistItem[];
+}
+export type ChecklistItem = {
+  id: string;
+  text: string;
+  isChecked: boolean;
 }
 
 export type BoardColumnsAction =
@@ -47,6 +52,7 @@ export type BoardColumnsAction =
   | { type: 'changeCardBackgroundColor'; boardColumn: BoardColumn; card: Card; newColor: string }
   | { type: 'moveCard'; source: any; destination: any }
   | { type: 'addCardTextElement'; boardColumn: BoardColumn; card: Card; title: string }
+  | { type: 'addCardChecklistElement'; boardColumn: BoardColumn; card: Card; title: string }
   | { type: 'deleteCard'; boardColumn: BoardColumn; card: Card }
   | { type: 'toggleCardLabel'; boardColumn: BoardColumn; card: Card; label: Label }
   | { type: 'removeLabelFromAllCards'; label: Label }

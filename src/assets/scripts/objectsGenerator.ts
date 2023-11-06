@@ -1,4 +1,4 @@
-import { BoardColumn, BoardData, Card, Label, TextElement } from '../shared/types';
+import { BoardColumn, BoardData, Card, ChecklistElement, ChecklistItem, Label, TextElement } from '../shared/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getInitialBoardColumn(): BoardColumn {
@@ -14,7 +14,7 @@ export function getInitialCard(): Card {
     id: uuidv4(),
     backgroundColor: '',
     labels: [],
-    elements: [getInitialTextElement()],
+    elements: [getInitialChecklistElement()],
   }
 }
 export function getInitialLabel(): Label {
@@ -34,7 +34,22 @@ export function getInitialTextElement(): TextElement {
     isJustCreated: true,
   }
 }
-
+export function getInitialChecklistElement(): ChecklistElement {
+  return {
+    title: 'Checklist',
+    id: uuidv4(),
+    type: 'checklist',
+    isJustCreated: true,
+    items: [getInitialChecklistItem(), getInitialChecklistItem()],
+  }
+}
+export function getInitialChecklistItem(): ChecklistItem {
+  return {
+    id: uuidv4(),
+    text: 'Checklist item',
+    isChecked: false,
+  }
+}
 export function getInitialBoardData(): BoardData {
   return {
     backgroundColors: [

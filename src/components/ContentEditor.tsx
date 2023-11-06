@@ -16,6 +16,7 @@ import { getInitialLabel } from '../assets/scripts/objectsGenerator';
 import DeleteModal from './DeleteModal';
 import AddElementButton from './AddElementButton';
 import TextElementComponent from './TextElementComponent';
+import ChecklistComponent from './ChecklistComponent';
 
 
 const EditorContent = styled.div`
@@ -71,6 +72,16 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ column, card, ...props })
         />
       );
     }
+    if (element.type === 'checklist') {
+      return (
+        <ChecklistComponent 
+          column={column}
+          card={card}
+          checklistElement={element}
+          key={index}
+        />
+      );
+    }
   });
 
   return (
@@ -96,6 +107,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ column, card, ...props })
               boardColumn={column}
               card={card}
               customIcon={<FontAwesomeIcon icon={faSquareCheck} />}
+              closeOnConfirm={true}
             />
           </EditorSidebar>
         </EditorContent>

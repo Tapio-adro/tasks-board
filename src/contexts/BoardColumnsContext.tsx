@@ -1,6 +1,6 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
 import { BoardColumn, BoardColumnsAction, Card, TextElement } from '../assets/shared/types';
-import { getInitialBoardColumn, getInitialCard, getInitialTextElement } from '../assets/scripts/objectsGenerator';
+import { getInitialBoardColumn, getInitialCard, getInitialChecklistElement, getInitialTextElement } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
 interface Props {
@@ -95,6 +95,15 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       const textElement = getInitialTextElement();
       textElement.title = action.title;
       card.elements.push(textElement);
+      break;
+    }
+    case 'addCardChecklistElement': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const checklistElement = getInitialChecklistElement();
+      checklistElement.title = action.title;
+      card.elements.push(checklistElement);
       break;
     }
     case 'deleteCard': {

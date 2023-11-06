@@ -242,6 +242,17 @@ export default function AddElementButton({
           title: inputRef.current.value,
         });
         break;
+      case 'checklist':
+        if (!boardColumn || !card) {
+          break;
+        }
+        dispatch({
+          type: 'addCardChecklistElement',
+          boardColumn: boardColumn,
+          card: card,
+          title: inputRef.current.value,
+        });
+        break;
     }
 
     if (props.closeOnConfirm) {
