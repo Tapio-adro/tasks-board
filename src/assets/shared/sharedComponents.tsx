@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 
 interface StyledXMarkProps {
   readonly $noMarginLeft: boolean;
+  readonly $lowerOpacity: boolean;
 }
 const StyledXMark = styled.button<StyledXMarkProps>`
   height: 32px;
@@ -24,6 +25,9 @@ const StyledXMark = styled.button<StyledXMarkProps>`
   }
   ${props => props.$noMarginLeft && css`
     margin-left: 0;
+  `};
+  ${props => props.$lowerOpacity && css`
+    opacity: 0.8;
   `};
 `;
 const StyledIconButton = styled.button`
@@ -46,11 +50,12 @@ const StyledIconButton = styled.button`
 interface XMarkProps {
   onClick: () => void;
   noMarginLeft?: boolean;
+  lowerOpacity?: boolean;
 }
 
-const XMark: React.FC<XMarkProps> = ({onClick, noMarginLeft = false}) => {
+const XMark: React.FC<XMarkProps> = ({onClick, noMarginLeft = false, lowerOpacity = false}) => {
   return (
-    <StyledXMark onClick={onClick} $noMarginLeft={noMarginLeft} >
+    <StyledXMark onClick={onClick} $noMarginLeft={noMarginLeft} $lowerOpacity={lowerOpacity}>
       <FontAwesomeIcon icon={faXmark} />
     </StyledXMark>
   );

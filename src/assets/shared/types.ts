@@ -53,6 +53,10 @@ export type BoardColumnsAction =
   | { type: 'moveCard'; source: any; destination: any }
   | { type: 'addCardTextElement'; boardColumn: BoardColumn; card: Card; title: string }
   | { type: 'addCardChecklistElement'; boardColumn: BoardColumn; card: Card; title: string }
+  | { type: 'addChecklistItem'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; text: string }
+  | { type: 'setChecklistItemText'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; checklistItem: ChecklistItem; newText: string }
+  | { type: 'toggleChecklistItem'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; checklistItem: ChecklistItem }
+  | { type: 'deleteChecklistItem'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; checklistItem: ChecklistItem }
   | { type: 'deleteCard'; boardColumn: BoardColumn; card: Card }
   | { type: 'toggleCardLabel'; boardColumn: BoardColumn; card: Card; label: Label }
   | { type: 'removeLabelFromAllCards'; label: Label }

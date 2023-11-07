@@ -9,6 +9,19 @@ input[type=text]
 input[type=text]::placeholder
   font-weight: normal
 
+textarea
+  resize: none
+  border: 2px solid #091E4224
+  border-radius: 4px
+  // padding: 5.5px 10px
+  padding: 8px
+  overflow: hidden
+  color: #172b4d
+  font-size: 14px
+  width: 100%
+  &:focus
+    border: 2px solid #388BFF
+
 .text-editor-toolbar
   border-top-right-radius: 8px
   border-top-left-radius: 8px
@@ -58,3 +71,4 @@ input[type=text]::placeholder
   color: #172b4d
   border-bottom-right-radius: 8px
   border-bottom-left-radius: 8px
+

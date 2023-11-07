@@ -1,6 +1,6 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
-import { BoardColumn, BoardColumnsAction, Card, TextElement } from '../assets/shared/types';
-import { getInitialBoardColumn, getInitialCard, getInitialChecklistElement, getInitialTextElement } from '../assets/scripts/objectsGenerator';
+import { BoardColumn, BoardColumnsAction, Card, ChecklistElement, TextElement } from '../assets/shared/types';
+import { getInitialBoardColumn, getInitialCard, getInitialChecklistElement, getInitialChecklistItem, getInitialTextElement } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
 
 interface Props {
@@ -106,6 +106,61 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       card.elements.push(checklistElement);
       break;
     }
+    case 'addChecklistItem': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const checklistElementIndex = getCardElementIndexById(card, action.checklistElement.id);
+      const checklistElement = card.elements[checklistElementIndex];
+      const checklistItem = getInitialChecklistItem();
+      checklistItem.text = action.text;
+      if (!isChecklistElement(checklistElement)) {
+        return;
+      }
+      checklistElement.items.push(checklistItem);
+      break;
+    }
+    case 'setChecklistItemText': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const checklistElementIndex = getCardElementIndexById(card, action.checklistElement.id);
+      const checklistElement = card.elements[checklistElementIndex];
+      if (!isChecklistElement(checklistElement)) {
+        return;
+      }
+      const checklistItemIndex = getChecklistItemIndexById(checklistElement, action.checklistItem.id);
+      const checklistItem = checklistElement.items[checklistItemIndex];
+      checklistItem.text = action.newText;
+      break;
+    }
+    case 'toggleChecklistItem': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const checklistElementIndex = getCardElementIndexById(card, action.checklistElement.id);
+      const checklistElement = card.elements[checklistElementIndex];
+      if (!isChecklistElement(checklistElement)) {
+        return;
+      }
+      const checklistItemIndex = getChecklistItemIndexById(checklistElement, action.checklistItem.id);
+      const checklistItem = checklistElement.items[checklistItemIndex];
+      checklistItem.isChecked = !checklistItem.isChecked;
+      break;
+    }
+    case 'deleteChecklistItem': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      const card = draft[columnIndex].cards[cardIndex];
+      const checklistElementIndex = getCardElementIndexById(card, action.checklistElement.id);
+      const checklistElement = card.elements[checklistElementIndex];
+      if (!isChecklistElement(checklistElement)) {
+        return;
+      }
+      const checklistItemIndex = getChecklistItemIndexById(checklistElement, action.checklistItem.id);
+      checklistElement.items.splice(checklistItemIndex, 1);
+      break;
+    }
     case 'deleteCard': {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
@@ -194,8 +249,14 @@ function getCardIndexById(column: BoardColumn, id: string): number {
 function getCardElementIndexById(card: Card, id: string): number {
   return card.elements.findIndex((element) => element.id === id);
 }
+function getChecklistItemIndexById(checklistElement: ChecklistElement, id: string): number {
+  return checklistElement.items.findIndex((item) => item.id === id);
+}
 function isTextElement(element: any): element is TextElement {
   return element.type === 'text';
+}
+function isChecklistElement(element: any): element is ChecklistElement {
+  return element.type === 'checklist';
 }
 function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
   return draft[getColumnIndexById(draft, id)]

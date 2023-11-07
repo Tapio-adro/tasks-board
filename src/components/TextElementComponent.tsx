@@ -155,8 +155,13 @@ const TextElementComponent: React.FC<TextElementComponentProps> = ({column, card
     });
   }
   function isTextEmpty() {
-    console.log(editorState.getCurrentContent().getPlainText());
-    return editorState.getCurrentContent().getPlainText().replace(/^\s*$(?:\r\n?|\n)/gm, '') === '';
+    return (
+      editorState
+        .getCurrentContent()
+        .getPlainText()
+        .replaceAll(/^\s*$(?:\r\n?|\n)/gm, '') 
+        .replaceAll(' ', '') === ''
+    );
   }
   function deleteElement() {
     boardColumnsDispatch({

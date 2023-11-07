@@ -70,6 +70,7 @@ const ChecklistItemsContainer = styled.div`
   flex-direction: column;
   /* margin-left: 8px; */
   margin-bottom: 8px;
+  margin-top: 8px;
 `;
 
 interface ChecklistComponentProps {
@@ -80,6 +81,7 @@ interface ChecklistComponentProps {
 
 const ChecklistComponent: React.FC<ChecklistComponentProps> = ({column, card, checklistElement}) => {
   const boardColumnsDispatch = useBoardColumnsDispatch();
+  const [isAddingItem, setIsAddingItem] = useState(false);
 
   useEffect(() => {
     if (checklistElement.isJustCreated) {
@@ -136,7 +138,8 @@ const ChecklistComponent: React.FC<ChecklistComponentProps> = ({column, card, ch
 
   const checklistItemsList = checklistElement.items.map((item) => {
     return (
-      <ChecklistItemComponent 
+      <ChecklistItemComponent
+        key={item.id}
         column={column}
         card={card}
         checklistElement={checklistElement}
@@ -160,7 +163,19 @@ const ChecklistComponent: React.FC<ChecklistComponentProps> = ({column, card, ch
       <ChecklistItemsContainer>
         {checklistItemsList}
       </ChecklistItemsContainer>
-      <GreyButton>Add an item</GreyButton>
+      {isAddingItem ? (
+        <ChecklistItemComponent 
+          column={column}
+          card={card}
+          checklistElement={checklistElement}
+          mode='add'
+          setIsAddingItem={setIsAddingItem}
+        />
+      ) : (
+        <GreyButton
+          onClick={() => setIsAddingItem(true)}
+        >Add an item</GreyButton>
+      )}
     </StyledChecklistElement>
   );
 };
