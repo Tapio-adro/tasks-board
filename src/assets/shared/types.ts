@@ -42,6 +42,7 @@ export type ChecklistItem = {
 }
 
 export type BoardColumnsAction =
+  | { type: 'setBoardColumns'; boardColumns: BoardColumn[] }
   | { type: 'addColumn'; title: string }
   | { type: 'renameColumn'; boardColumn: BoardColumn; newTitle: string }
   | { type: 'moveColumn'; startIndex: number; endIndex: number }
@@ -68,6 +69,7 @@ export type BoardColumnsAction =
   
 
 export type BoardData = {
+  boardTitle: string;
   backgroundColors: string[];
   labels: Label[];
   areCardLabelsExpanded: boolean;
@@ -80,6 +82,8 @@ export type Label = {
 
 
 export type BoardDataAction = 
+  | { type: 'setBoardData'; boardData: BoardData }
+  | { type: 'renameBoard'; newTitle: string }
   | { type: 'createLabel'; title: string; color: string }
   | { type: 'renameLabel'; label: Label; newTitle: string }
   | { type: 'changeLabelColor'; label: Label; newColor: string }

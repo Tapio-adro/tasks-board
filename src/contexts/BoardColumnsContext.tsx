@@ -39,6 +39,9 @@ export function useBoardColumnsDispatch(): ((action: BoardColumnsAction) => void
 
 function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
   switch (action.type) {
+    case "setBoardColumns": {
+      return action.boardColumns;
+    }
     case 'addColumn': {
       const boardColumn = getInitialBoardColumn()
       boardColumn.title = action.title

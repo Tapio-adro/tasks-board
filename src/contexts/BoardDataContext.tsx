@@ -37,6 +37,13 @@ export function useBoardDataDispatch(): ((action: BoardDataAction) => void) {
 
 function boardDataReducer(draft: BoardData, action: BoardDataAction) {
   switch (action.type) {
+    case "setBoardData": {
+      return action.boardData;
+    }
+    case "renameBoard": {
+      draft.boardTitle = action.newTitle;
+      break;
+    }
     case "createLabel": {
       const label = getInitialLabel();
       label.title = action.title;

@@ -54,6 +54,7 @@ export function getInitialChecklistItem(): ChecklistItem {
 }
 export function getInitialBoardData(): BoardData {
   return {
+    boardTitle: 'Board',
     backgroundColors: [
       '#4BCE97', '#F5CD47', '#faa53d', '#f87462', '#9f8fef', 
       '#579dff', '#60c6d2', '#94C748', '#e774bb', '#8590a2'

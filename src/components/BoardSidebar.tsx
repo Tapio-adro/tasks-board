@@ -88,12 +88,12 @@ const BoardItem = styled.div<BoardItemProps>`
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  &:hover {
-    background-color: hsla(0, 0%, 100%, 0.16);
-  }
   ${(props) => props.$isActive && css`
     background-color: hsla(0, 0%, 100%, 0.3);
   `};
+  &:hover {
+    background-color: hsla(0, 0%, 100%, 0.16);
+  }
 `;
 const BoardTitle = styled.div`
   

@@ -9,6 +9,8 @@ import Modal from './Modal';
 import AppearanceEditor from './AppearanceEditor';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import BoardSidebar from './BoardSidebar';
+import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext';
+import { Board } from '../assets/shared/types';
 
 
 const StyledBoardComponent = styled.div`
@@ -40,11 +42,17 @@ const ColumnsContainer = styled.div`
 
 
 export default function BoardComponent () {
-  const [boardTitle, setBoardTitle] = useState<string>('Board');
   const boardColumns = useBoardColumns();
   const boardColumnsDispatch = useBoardColumnsDispatch();
+  const boardData = useBoardData();
+  const boardDataDispatch = useBoardDataDispatch();
 
-
+  function renameBoard(newTitle: string) {
+    boardDataDispatch({
+      type: 'renameBoard',
+      newTitle
+    });
+  }
   function onDragEnd(result: any) {
     // console.log(result.type);
     // console.log(result);
@@ -72,7 +80,31 @@ export default function BoardComponent () {
       });
     }
   };
-  
+
+  useEffect(() => {
+    const currentBoard = localStorage.getItem('currentBoard');
+    if (!currentBoard) return;
+
+    const board: Board = JSON.parse(currentBoard);
+    boardColumnsDispatch({
+      type: 'setBoardColumns',
+      boardColumns: board.columns
+    });
+    boardDataDispatch({
+      type: 'setBoardData',
+      boardData: board.data
+    });
+  }, [])
+  useEffect(() => {
+    if (!boardColumns || !boardData) return;
+
+    const board: Board = {
+      data: boardData,
+      columns: boardColumns
+    }
+
+    localStorage.setItem('currentBoard', JSON.stringify(board));
+  }, [boardColumns, boardData])
 
   const boardColumnsList = boardColumns?.map((column, index) => {
     return (
@@ -96,8 +128,8 @@ export default function BoardComponent () {
     <StyledBoardComponent>
       <BoardTitle>
         <RenamableField
-          fieldValue={boardTitle}
-          onFieldValueChange={setBoardTitle}
+          fieldValue={boardData?.boardTitle || ''}
+          onFieldValueChange={renameBoard}
         />
       </BoardTitle>
       <DragDropContext onDragEnd={onDragEnd}>
