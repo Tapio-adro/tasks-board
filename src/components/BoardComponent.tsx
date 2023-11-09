@@ -8,8 +8,12 @@ import RenamableField from './RenamableField';
 import Modal from './Modal';
 import AppearanceEditor from './AppearanceEditor';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import BoardSidebar from './BoardSidebar';
 
 
+const StyledBoardComponent = styled.div`
+  margin-left: 20px;
+`;
 const BoardTitle = styled.div`
   backdrop-filter: blur(8px);
   height: 50px;
@@ -89,7 +93,7 @@ export default function BoardComponent () {
   });
 
   return (
-    <>
+    <StyledBoardComponent>
       <BoardTitle>
         <RenamableField
           fieldValue={boardTitle}
@@ -110,10 +114,11 @@ export default function BoardComponent () {
           )}
         </Droppable>
       </DragDropContext>
+      <BoardSidebar />
       {/* <ColumnsContainer>
         {boardColumnsList}
       </ColumnsContainer> */}
-    </>
+    </StyledBoardComponent>
   );
 }
 

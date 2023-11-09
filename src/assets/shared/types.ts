@@ -1,9 +1,8 @@
 import { ContentState } from 'react-draft-wysiwyg';
 
 export type Board = {
-  title: string;
+  data: BoardData;
   columns: BoardColumn[];
-  id: string;
 }
 export type BoardColumn = {
   title: string;

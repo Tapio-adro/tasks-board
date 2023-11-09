@@ -274,12 +274,12 @@ const ChecklistItemComponent: React.FC<ChecklistItemComponentProps> = ({
   ) : null;
 
   return (
-    <StyledChecklistItem
-      ref={props.provided.innerRef}
-      {...props.provided.draggableProps}
-    >
+    <StyledChecklistItem>
       {checklistItemAdd}
-      {(mode == 'view') && <ChecklistItemContent>
+      {(mode == 'view') && <ChecklistItemContent
+        ref={props.provided.innerRef}
+        {...props.provided.draggableProps}
+      >
         <ChecklistItemCheckboxContainer
           // onClick={toggleChecklistItem}
         >
