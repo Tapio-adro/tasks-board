@@ -124,13 +124,10 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
-  const [isContentEditorOpen, setIsContentEditorOpen] = useState(true);
+  const [isContentEditorOpen, setIsContentEditorOpen] = useState(false);
   const boardData = useBoardData();
   const boardDataDispatch = useBoardDataDispatch();
 
-  useEffect(() => {
-    // setIsAppearanceEditorOpen(true);
-  }, [])
   
   function renameCard(newTitle: string) {
     boardColumnsDispatch({

@@ -42,8 +42,8 @@ export default function BoardComponent () {
 
 
   function onDragEnd(result: any) {
-    console.log(result.type);
-    console.log(result);
+    // console.log(result.type);
+    // console.log(result);
     if (!result.destination) {
       return;
     }
@@ -54,9 +54,15 @@ export default function BoardComponent () {
         startIndex: result.source.index,
         endIndex: result.destination.index
       });
-    } else {
+    } else if (result.type === 'CARD') {
       boardColumnsDispatch({
         type: 'moveCard',
+        source: result.source,
+        destination: result.destination
+      });
+    } else if (result.type === 'CHECKLIST_ITEM') {
+      boardColumnsDispatch({
+        type: 'moveChecklistItem',
         source: result.source,
         destination: result.destination
       });

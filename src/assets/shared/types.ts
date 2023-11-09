@@ -56,6 +56,7 @@ export type BoardColumnsAction =
   | { type: 'addChecklistItem'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; text: string }
   | { type: 'setChecklistItemText'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; checklistItem: ChecklistItem; newText: string }
   | { type: 'toggleChecklistItem'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; checklistItem: ChecklistItem }
+  | { type: 'moveChecklistItem'; source: any; destination: any }
   | { type: 'deleteChecklistItem'; boardColumn: BoardColumn; card: Card; checklistElement: ChecklistElement; checklistItem: ChecklistItem }
   | { type: 'deleteCard'; boardColumn: BoardColumn; card: Card }
   | { type: 'toggleCardLabel'; boardColumn: BoardColumn; card: Card; label: Label }
@@ -85,6 +86,7 @@ export type BoardDataAction =
   | { type: 'changeLabelColor'; label: Label; newColor: string }
   | { type: 'deleteLabel'; label: Label }
   | { type: 'toggleCardLabelsExpand' }
+  // | { type: '' }
 
 
 export type ElementType = 'boardColumn' | 'card' | 'text' | 'checklist'

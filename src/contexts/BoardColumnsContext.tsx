@@ -88,6 +88,12 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       draft[destinationColumnIndex].cards.splice(action.destination.index, 0, removed);
       break;
     }
+    case 'deleteCard': {
+      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
+      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
+      draft[columnIndex].cards.splice(cardIndex, 1);
+      break;
+    }
     case 'addCardTextElement': {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
@@ -148,6 +154,20 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       checklistItem.isChecked = !checklistItem.isChecked;
       break;
     }
+    case 'moveChecklistItem': {
+      const [columnIndex, cardIndex] = getColumnAndCardIndexesByElementId(draft, action.source.droppableId);
+      const card = draft[columnIndex].cards[cardIndex];
+      const sourceChecklistElementIndex = getCardElementIndexById(card, action.source.droppableId);
+      const destinationChecklistElementIndex = getCardElementIndexById(card, action.destination.droppableId);
+      const sourceChecklistElement = card.elements[sourceChecklistElementIndex];
+      const destinationChecklistElement = card.elements[destinationChecklistElementIndex];
+      if (!isChecklistElement(sourceChecklistElement) || !isChecklistElement(destinationChecklistElement)) {
+        return;
+      }
+      const [removed] = sourceChecklistElement.items.splice(action.source.index, 1);
+      destinationChecklistElement.items.splice(action.destination.index, 0, removed);
+      break;
+    }
     case 'deleteChecklistItem': {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
@@ -159,12 +179,6 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       }
       const checklistItemIndex = getChecklistItemIndexById(checklistElement, action.checklistItem.id);
       checklistElement.items.splice(checklistItemIndex, 1);
-      break;
-    }
-    case 'deleteCard': {
-      const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
-      const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
-      draft[columnIndex].cards.splice(cardIndex, 1);
       break;
     }
     case 'toggleCardLabel': {
@@ -257,6 +271,19 @@ function isTextElement(element: any): element is TextElement {
 }
 function isChecklistElement(element: any): element is ChecklistElement {
   return element.type === 'checklist';
+}
+function getColumnAndCardIndexesByElementId(draft: BoardColumn[], id: string): [number, number] {
+  for (let columnIndex = 0; columnIndex < draft.length; columnIndex++) {
+    const column = draft[columnIndex];
+    for (let cardIndex = 0; cardIndex < column.cards.length; cardIndex++) {
+      const card = column.cards[cardIndex];
+      const elementIndex = getCardElementIndexById(card, id);
+      if (elementIndex !== -1) {
+        return [columnIndex, cardIndex];
+      }
+    }
+  }
+  return [-1, -1];
 }
 function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
   return draft[getColumnIndexById(draft, id)]

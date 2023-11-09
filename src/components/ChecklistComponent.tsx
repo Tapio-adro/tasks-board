@@ -10,6 +10,7 @@ import htmlToDraft from 'html-to-draftjs';
 import RenamableField from './RenamableField';
 import draftToMarkdown from 'draftjs-to-markdown';
 import ChecklistItemComponent from './ChecklistItemComponent';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 
 const StyledChecklistElement = styled.div`
@@ -136,16 +137,25 @@ const ChecklistComponent: React.FC<ChecklistComponentProps> = ({column, card, ch
     });
   }
 
-  const checklistItemsList = checklistElement.items.map((item) => {
+  const checklistItemsList = checklistElement.items.map((item, index) => {
     return (
-      <ChecklistItemComponent
+      <Draggable
         key={item.id}
-        column={column}
-        card={card}
-        checklistElement={checklistElement}
-        checklistItem={item}
-        mode='view'
-      />
+        draggableId={item.id}
+        index={index}
+      >
+        {(provided, snapshot) => (
+          <ChecklistItemComponent
+            column={column}
+            card={card}
+            checklistElement={checklistElement}
+            checklistItem={item}
+            mode='view'
+            provided={provided}
+            snapshot={snapshot}
+          />
+        )}
+      </Draggable>
     );
   });
 
@@ -160,9 +170,21 @@ const ChecklistComponent: React.FC<ChecklistComponentProps> = ({column, card, ch
         </Title>
         <GreyButton onClick={deleteElement}>Delete</GreyButton>
       </TitleWrapper>
-      <ChecklistItemsContainer>
-        {checklistItemsList}
-      </ChecklistItemsContainer>
+      <Droppable
+        droppableId={checklistElement.id}
+        type='CHECKLIST_ITEM'
+        direction='vertical'
+      >
+        {(provided, snapshot) => (
+          <ChecklistItemsContainer
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {checklistItemsList}
+            {provided.placeholder}
+          </ChecklistItemsContainer>
+        )}
+      </Droppable>
       {isAddingItem ? (
         <ChecklistItemComponent 
           column={column}

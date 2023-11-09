@@ -9,12 +9,14 @@ export function getInitialBoardColumn(): BoardColumn {
   }
 }
 export function getInitialCard(): Card {
+  const textElement = getInitialTextElement();
+  textElement.isJustCreated = false;
   return {
     title: 'Card',
     id: uuidv4(),
     backgroundColor: '',
     labels: [],
-    elements: [getInitialChecklistElement()],
+    elements: [textElement],
   }
 }
 export function getInitialLabel(): Label {
@@ -26,7 +28,7 @@ export function getInitialLabel(): Label {
 }
 export function getInitialTextElement(): TextElement {
   return {
-    title: 'Text',
+    title: 'Description',
     id: uuidv4(),
     type: 'text',
     isEditorActive: false,
@@ -40,7 +42,7 @@ export function getInitialChecklistElement(): ChecklistElement {
     id: uuidv4(),
     type: 'checklist',
     isJustCreated: true,
-    items: [getInitialChecklistItem(), getInitialChecklistItem()],
+    items: [],
   }
 }
 export function getInitialChecklistItem(): ChecklistItem {
