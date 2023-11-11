@@ -169,7 +169,7 @@ const board: Board = {
           ],
         },
         {
-          title: 'As well as add some labelIds to it',
+          title: 'As well as add some labels to it',
           id: 'db0bcf0f-fc98-4586-9814-8c5ac8904415',
           backgroundColor: '',
           labelIds: ['123', 'b59795ee-4920-451b-bb8d-6a9d680635d8'],
@@ -219,11 +219,11 @@ const board: Board = {
       ],
     },
     {
-      title: 'LabelIds',
+      title: 'Labels',
       id: 'd893f78d-a48e-4581-ae46-0ded184a2a50',
       cards: [
         {
-          title: 'You can create, change color, rename and delete labelIds',
+          title: 'You can create, change color, rename and delete labels',
           id: '62002b12-82b0-4dc0-84bf-976f8ff0bbba',
           backgroundColor: '',
           labelIds: ['02454592-7aeb-46c8-9d43-c6c834e6bbe6'],
