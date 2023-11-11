@@ -11,6 +11,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import BoardSidebar from './BoardSidebar';
 import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext';
 import { Board } from '../assets/shared/types';
+import { useBoardsDispatch } from '../contexts/BoardsContext';
 
 
 const StyledBoardComponent = styled.div`
@@ -46,6 +47,7 @@ export default function BoardComponent () {
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const boardData = useBoardData();
   const boardDataDispatch = useBoardDataDispatch();
+  const boardsDispatch = useBoardsDispatch();
 
   function renameBoard(newTitle: string) {
     boardDataDispatch({
@@ -82,29 +84,19 @@ export default function BoardComponent () {
   };
 
   useEffect(() => {
-    const currentBoard = localStorage.getItem('currentBoard');
-    if (!currentBoard) return;
-
-    const board: Board = JSON.parse(currentBoard);
-    boardColumnsDispatch({
-      type: 'setBoardColumns',
-      boardColumns: board.columns
-    });
-    boardDataDispatch({
-      type: 'setBoardData',
-      boardData: board.data
-    });
-  }, [])
+    if (!boardColumns) return;
+    boardsDispatch({
+      type: 'updateBoardColumns',
+      newBoardColumns: boardColumns
+    })
+  }, [boardColumns])
   useEffect(() => {
-    if (!boardColumns || !boardData) return;
-
-    const board: Board = {
-      data: boardData,
-      columns: boardColumns
-    }
-
-    localStorage.setItem('currentBoard', JSON.stringify(board));
-  }, [boardColumns, boardData])
+    if (!boardData) return;
+    boardsDispatch({
+      type: 'updateBoardData',
+      newBoardData: boardData
+    })
+  }, [boardData])
 
   const boardColumnsList = boardColumns?.map((column, index) => {
     return (
@@ -128,7 +120,7 @@ export default function BoardComponent () {
     <StyledBoardComponent>
       <BoardTitle>
         <RenamableField
-          fieldValue={boardData?.boardTitle || ''}
+          fieldValue={boardData?.title || ''}
           onFieldValueChange={renameBoard}
         />
       </BoardTitle>

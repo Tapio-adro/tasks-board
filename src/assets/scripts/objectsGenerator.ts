@@ -1,4 +1,4 @@
-import { BoardColumn, BoardData, Card, ChecklistElement, ChecklistItem, Label, TextElement } from '../shared/types';
+import { Board, BoardColumn, BoardData, Card, ChecklistElement, ChecklistItem, Label, TextElement } from '../shared/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getInitialBoardColumn(): BoardColumn {
@@ -54,12 +54,21 @@ export function getInitialChecklistItem(): ChecklistItem {
 }
 export function getInitialBoardData(): BoardData {
   return {
-    boardTitle: 'Board',
+    title: 'Board',
     backgroundColors: [
       '#4BCE97', '#F5CD47', '#faa53d', '#f87462', '#9f8fef', 
       '#579dff', '#60c6d2', '#94C748', '#e774bb', '#8590a2'
     ],
     labels: [{title: 'Label', id: '123', color: '#f87462'}],
     areCardLabelsExpanded: false,
+    id: uuidv4(),
   }
+}
+export function getInitialBoards(): Board[] {
+  return [
+    {
+      columns: [],
+      data: getInitialBoardData(),
+    },
+  ];
 }

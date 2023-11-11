@@ -1,7 +1,8 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
-import { BoardData, BoardDataAction } from '../assets/shared/types';
-import { getInitialBoardData, getInitialLabel } from '../assets/scripts/objectsGenerator';
+import { Board, BoardData, BoardDataAction } from '../assets/shared/types';
+import { getInitialBoardData, getInitialBoards, getInitialLabel } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
+import { useBoards, useBoardsDispatch } from './BoardsContext';
 
 interface Props {
   children?: ReactNode
@@ -9,7 +10,7 @@ interface Props {
 
 const BoardDataContext = createContext<BoardData | null>(null);
 const BoardDataDispatchContext = createContext<Dispatch<BoardDataAction>>(() => {});
-const initialBoardData = getInitialBoardData();
+const initialBoardData = getBoardData();
 
 
 export function BoardDataProvider({ children }: Props) {
@@ -41,7 +42,7 @@ function boardDataReducer(draft: BoardData, action: BoardDataAction) {
       return action.boardData;
     }
     case "renameBoard": {
-      draft.boardTitle = action.newTitle;
+      draft.title = action.newTitle;
       break;
     }
     case "createLabel": {
@@ -74,4 +75,19 @@ function boardDataReducer(draft: BoardData, action: BoardDataAction) {
 }
 function getLabelIndexById(draft: BoardData, id: string) {
   return draft.labels.findIndex((label) => label.id === id);
+}
+
+function getBoardData(): BoardData {
+  const boards = localStorage.getItem('boards');
+  if (!boards) {
+    console.log('boards created');
+    const initialBoards = getInitialBoards();
+    localStorage.setItem('boards', JSON.stringify(initialBoards));
+    localStorage.setItem('currentBoardId', initialBoards[0].data.id);
+    return initialBoards[0].data;
+  } else {
+    const currentBoardId = localStorage.getItem('currentBoardId');
+    const currentBoard = JSON.parse(boards).find((board: Board) => board.data.id === currentBoardId);
+    return currentBoard.data;
+  }
 }

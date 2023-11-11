@@ -69,10 +69,11 @@ export type BoardColumnsAction =
   
 
 export type BoardData = {
-  boardTitle: string;
+  title: string;
   backgroundColors: string[];
   labels: Label[];
   areCardLabelsExpanded: boolean;
+  id: string;
 }
 export type Label = {
   title: string;
@@ -91,5 +92,11 @@ export type BoardDataAction =
   | { type: 'toggleCardLabelsExpand' }
   // | { type: '' }
 
+
+export type BoardsAction =
+  | { type: 'createBoard'; board: Board }
+  | { type: 'updateBoardData'; newBoardData: BoardData; }
+  | { type: 'updateBoardColumns'; newBoardColumns: BoardColumn[]; }
+  | { type: 'deleteBoard'; board: Board }
 
 export type ElementType = 'boardColumn' | 'card' | 'text' | 'checklist'

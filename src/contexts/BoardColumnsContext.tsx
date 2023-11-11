@@ -1,7 +1,8 @@
 import { Dispatch, ReactNode, createContext, useContext } from 'react';
-import { BoardColumn, BoardColumnsAction, Card, ChecklistElement, TextElement } from '../assets/shared/types';
-import { getInitialBoardColumn, getInitialCard, getInitialChecklistElement, getInitialChecklistItem, getInitialTextElement } from '../assets/scripts/objectsGenerator';
+import { Board, BoardColumn, BoardColumnsAction, Card, ChecklistElement, TextElement } from '../assets/shared/types';
+import { getInitialBoardColumn, getInitialBoards, getInitialCard, getInitialChecklistElement, getInitialChecklistItem, getInitialTextElement } from '../assets/scripts/objectsGenerator';
 import { useImmerReducer } from 'use-immer';
+import { useBoards, useBoardsDispatch } from './BoardsContext';
 
 interface Props {
   children?: ReactNode
@@ -9,9 +10,7 @@ interface Props {
 
 const BoardColumnsContext = createContext<BoardColumn[] | null>(null);
 const BoardColumnsDispatchContext = createContext<Dispatch<BoardColumnsAction>>(() => {});
-const initialBoardColumn = getInitialBoardColumn();
-initialBoardColumn.cards.push(getInitialCard());
-const initialBoardColumns = [initialBoardColumn];
+const initialBoardColumns = getBoardColumns();
 
 
 export function BoardColumnsProvider({ children }: Props) {
@@ -255,6 +254,10 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       break;
     }
   }
+  // boardsDispatch({
+  //   type: 'updateBoardColumns',
+  //   newBoardColumns: draft
+  // });
 }
 
 function getColumnIndexById(draft: BoardColumn[], id: string): number {
@@ -290,4 +293,19 @@ function getColumnAndCardIndexesByElementId(draft: BoardColumn[], id: string): [
 }
 function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
   return draft[getColumnIndexById(draft, id)]
+}
+
+function getBoardColumns(): BoardColumn[] {
+  const boards = localStorage.getItem('boards');
+  if (!boards) {
+    console.log('boards created');
+    const initialBoards = getInitialBoards();
+    localStorage.setItem('boards', JSON.stringify(initialBoards));
+    localStorage.setItem('currentBoardId', initialBoards[0].data.id);
+    return initialBoards[0].columns;
+  } else {
+    const currentBoardId = localStorage.getItem('currentBoardId');
+    const currentBoard = JSON.parse(boards).find((board: Board) => board.data.id === currentBoardId);
+    return currentBoard.columns;
+  }
 }

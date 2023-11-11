@@ -4,6 +4,12 @@ import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import CreateBoardModal from './CreateBoardModal';
+import { useBoards, useBoardsDispatch } from '../contexts/BoardsContext';
+import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext';
+import { Board } from '../assets/shared/types';
+import { getInitialBoardData } from '../assets/scripts/objectsGenerator';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 
 interface StyledBoardSidebarProps {
@@ -38,6 +44,10 @@ const ToggleArrow = styled.button<StyledBoardSidebarProps>`
   background-color: hsla(218,24.2%,38.8%,0.9);
   ${(props) => props.$isSidebarOpen && css`
     transform: scaleX(-1);
+    background-color: hsla(218,24.2%,33.8%,0.9);
+    &:hover {
+      opacity: 0.95;
+    }
   `};
   &:hover {
     background-color: hsla(218,24.2%,33.8%,0.9);
@@ -46,7 +56,7 @@ const ToggleArrow = styled.button<StyledBoardSidebarProps>`
 const SidebarContent = styled.div`
   background-color: hsla(218,24.2%,38.8%,0.9);
   width: 230px;
-  padding-top: 8px;
+  padding-top: 4px;
 `;
 const BoardsSection = styled.section`
   
@@ -57,6 +67,7 @@ const BoardsTitleWrapper = styled.div`
   align-items: center;
   padding-left: 12px;
   margin-bottom: 4px;
+  padding-right: 4px;
 `;
 const BoardsTitle = styled.div`
   font-size: 14px;
@@ -76,7 +87,7 @@ const AddBoardButton = styled.button`
   font-size: 14px;
 `;
 const BoardsContainer = styled.div`
-  
+
 `;
 const BoardItem = styled.div<BoardItemProps>`
   font-size: 14px;
@@ -111,7 +122,13 @@ const RemoveBoardButton = styled(AddBoardButton)`
 // }
 
 const BoardSidebar: React.FC = () => {
+  const boards = useBoards();
+  const boardsDispatch = useBoardsDispatch();
+  const boardData = useBoardData();
+  const boardDataDispatch = useBoardDataDispatch();
+  const boardColumnsDispatch = useBoardColumnsDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // useEffect(() => {
   //   if (checklistElement.isJustCreated) {
@@ -127,45 +144,96 @@ const BoardSidebar: React.FC = () => {
   //   }
   // }, [])
 
-  return (
-    <StyledBoardSidebar $isSidebarOpen={isSidebarOpen}>
-      <SidebarContent>
-        <BoardsSection>
-          <BoardsTitleWrapper>
-            <BoardsTitle>Boards</BoardsTitle>
-            <AddBoardButton>
-              <FontAwesomeIcon icon={faPlus} />
-            </AddBoardButton>
-          </BoardsTitleWrapper>
-          <BoardsContainer>
-            <BoardItem>
-              <BoardTitle>Board 1</BoardTitle>
-              <RemoveBoardButton>
-                <FontAwesomeIcon icon={faXmark}/>
-              </RemoveBoardButton>
-            </BoardItem>
-            <BoardItem>
-              <BoardTitle>Board 2</BoardTitle>
-              <RemoveBoardButton>
-                <FontAwesomeIcon icon={faXmark}/>
-              </RemoveBoardButton>
-            </BoardItem>
-            <BoardItem>
-              <BoardTitle>Board 3</BoardTitle>
-              <RemoveBoardButton>
-                <FontAwesomeIcon icon={faXmark}/>
-              </RemoveBoardButton>
-            </BoardItem>
-          </BoardsContainer>
-        </BoardsSection>
-      </SidebarContent>
-      <ToggleArrow
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        $isSidebarOpen={isSidebarOpen}
+  function createBoard(title: string) {
+    console.log('createBoard', title);
+    const board: Board = {
+      data: getInitialBoardData(),
+      columns: [],
+    };
+    board.data.title = title;
+    boardsDispatch({
+      type: 'createBoard',
+      board
+    });
+    setBoard(board);
+  }
+  function setBoard(board: Board) {
+    if (board.data.id === boardData?.id) return;
+    boardDataDispatch({
+      type: 'setBoardData',
+      boardData: board.data
+    });
+    boardColumnsDispatch({
+      type: 'setBoardColumns',
+      boardColumns: board.columns
+    });
+    localStorage.setItem('currentBoardId', board.data.id);
+  }
+  function deleteBoard(e: MouseEvent, board: Board) {
+    e.stopPropagation();
+    if (board.data.id === boardData?.id) return;
+    boardsDispatch({
+      type: 'deleteBoard',
+      board
+    });
+  }
+
+  const boardsList = boards?.map((board) => {
+    return (
+      <BoardItem 
+        key={board.data.id} 
+        $isActive={board.data.id == boardData?.id}
+        onClick={() => setBoard(board)}
       >
-        <FontAwesomeIcon icon={faChevronRight} />
-      </ToggleArrow>
-    </StyledBoardSidebar>
+        <BoardTitle>{board.data.title}</BoardTitle>
+        <RemoveBoardButton
+          onClick={(e) => deleteBoard(e, board)}
+        >
+          <FontAwesomeIcon icon={faXmark}/>
+        </RemoveBoardButton>
+      </BoardItem>
+    );
+  });
+  
+  return (
+    <>
+      <OutsideClickHandler
+        onOutsideClick={() => setIsSidebarOpen(false)}
+        disabled={isCreateModalOpen}
+      >
+        <StyledBoardSidebar $isSidebarOpen={isSidebarOpen}>
+            <SidebarContent>
+              <BoardsSection>
+                <BoardsTitleWrapper>
+                  <BoardsTitle>Boards</BoardsTitle>
+                  <AddBoardButton
+                    onClick={() => setIsCreateModalOpen(true)}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </AddBoardButton>
+                </BoardsTitleWrapper>
+                <BoardsContainer>
+                  {boardsList}
+                </BoardsContainer>
+              </BoardsSection>
+            </SidebarContent>
+            <ToggleArrow
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              $isSidebarOpen={isSidebarOpen}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </ToggleArrow>
+        </StyledBoardSidebar>
+      </OutsideClickHandler>
+      {isCreateModalOpen && (
+        <CreateBoardModal 
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onCreate={createBoard}
+          headerText="Create board"    
+        />
+      )}
+    </>
   );
 };
 

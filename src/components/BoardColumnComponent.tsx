@@ -73,19 +73,6 @@ export default function BoardColumnComponent({column, ...props}: Props) {
       boardColumn: column
     })
   }
-  function onDragEnd(result: any) {
-    if (!result.destination) {
-      return;
-    }
-
-    // boardColumnsDispatch({
-    //   type: 'moveCard',
-    //   startColumn: column,
-    //   endColumn: 
-    //   startIndex: result.source.index,
-    //   endIndex: result.destination.index
-    // });
-  };
 
   const cardsList = column.cards?.map((card, index) => {
     return (

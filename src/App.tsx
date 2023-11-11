@@ -3,6 +3,7 @@ import BoardComponent from './components/BoardComponent';
 import bgImage from './assets/img/bg.jpg';
 import { BoardColumnsProvider } from './contexts/BoardColumnsContext';
 import { BoardDataProvider } from './contexts/BoardDataContext';
+import { BoardsProvider } from './contexts/BoardsContext';
 
 const StyledApp = styled.div`
   width: 100vw;
@@ -26,13 +27,15 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <BoardColumnsProvider>
-          <BoardDataProvider>
-            <StyledApp>
-              <BoardComponent />
-            </StyledApp>
-          </BoardDataProvider>
-        </BoardColumnsProvider>
+        <BoardsProvider>
+          <BoardColumnsProvider>
+            <BoardDataProvider>
+              <StyledApp>
+                <BoardComponent />
+              </StyledApp>
+            </BoardDataProvider>
+          </BoardColumnsProvider>
+        </BoardsProvider>
       </ThemeProvider>
     </>
   );
