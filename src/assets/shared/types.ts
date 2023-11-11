@@ -13,7 +13,7 @@ export type Card = {
   title: string;
   id: string;
   backgroundColor: string;
-  labels: Label[];
+  labelIds: string[];
   elements: CardElement[];
 }
 

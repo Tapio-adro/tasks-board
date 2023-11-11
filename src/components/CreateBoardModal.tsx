@@ -56,8 +56,8 @@ const CreateBoardModal: React.FC<CreateBoardModalProps> = ({ isOpen, ...props })
   const [titleInputValue, setTitleInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   
-  useHotkeys('esc', () => props.onClose());
-  useHotkeys('enter', createBoard);
+  useHotkeys('esc', handleEscPress, {enableOnFormTags: true});
+  useHotkeys('enter', createBoard, {enableOnFormTags: true});
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -70,6 +70,13 @@ const CreateBoardModal: React.FC<CreateBoardModalProps> = ({ isOpen, ...props })
     }
     props.onCreate(titleInputValue);
     props.onClose();
+  }
+  function handleEscPress() {
+    if (inputRef.current && inputRef.current === document.activeElement) {
+      inputRef.current.blur();
+    } else {
+      props.onClose();
+    }    
   }
 
   return (

@@ -80,7 +80,6 @@ function getLabelIndexById(draft: BoardData, id: string) {
 function getBoardData(): BoardData {
   const boards = localStorage.getItem('boards');
   if (!boards) {
-    console.log('boards created');
     const initialBoards = getInitialBoards();
     localStorage.setItem('boards', JSON.stringify(initialBoards));
     localStorage.setItem('currentBoardId', initialBoards[0].data.id);

@@ -68,7 +68,6 @@ function boardsReducer(draft: Board[], action: BoardsAction) {
 
 function getBoards(): Board[] {
   const boards = localStorage.getItem('boards');
-  console.log('loaded boards');
   
   if (!boards) {
     return getInitialBoards();

@@ -215,7 +215,7 @@ const AppearanceEditor: React.FC<AppearanceEditorProps> = ({ column, card, ...pr
       <LabelWrapper key={label.id}>
         <LabelContent>
           <LabelCheckbox type='checkbox'
-            checked={card.labels.some((cardLabel) => cardLabel.id === label.id)}
+            checked={card.labelIds.some((cardLabelId) => cardLabelId === label.id)}
             onChange={() => handleLabelClick(label)}
           />
           <LabelTitle

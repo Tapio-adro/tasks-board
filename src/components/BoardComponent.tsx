@@ -56,8 +56,6 @@ export default function BoardComponent () {
     });
   }
   function onDragEnd(result: any) {
-    // console.log(result.type);
-    // console.log(result);
     if (!result.destination) {
       return;
     }

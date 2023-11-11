@@ -121,12 +121,12 @@ interface CardComponentProps {
 }
 
 export default function CardComponent({column, card, ...props}: CardComponentProps) {
+  const boardData = useBoardData();
+  const boardDataDispatch = useBoardDataDispatch();
   const boardColumnsDispatch = useBoardColumnsDispatch();
   const renamableFieldRef = useRef<RenamableFieldHandle>(null);
   const [isAppearanceEditorOpen, setIsAppearanceEditorOpen] = useState(false);
   const [isContentEditorOpen, setIsContentEditorOpen] = useState(false);
-  const boardData = useBoardData();
-  const boardDataDispatch = useBoardDataDispatch();
 
   
   function renameCard(newTitle: string) {
@@ -161,8 +161,8 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
     setIsContentEditorOpen(false);
   }
 
-  const labels = card.labels.map((label) => {
-    return (
+  const labels = boardData?.labels.map((label) => {
+    return card.labelIds.some(labelId => labelId === label.id) ? (
       <Label
         key={label.id}
         style={{backgroundColor: label.color}}
@@ -171,7 +171,7 @@ export default function CardComponent({column, card, ...props}: CardComponentPro
       >
         {boardData?.areCardLabelsExpanded && label.title}
       </Label>
-    );
+    ) : null;
   });
 
   return (

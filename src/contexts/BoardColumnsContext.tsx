@@ -187,20 +187,20 @@ function boardColumnsReducer(draft: BoardColumn[], action: BoardColumnsAction) {
       const columnIndex = getColumnIndexById(draft, action.boardColumn.id);
       const cardIndex = getCardIndexById(action.boardColumn, action.card.id);
       const card = draft[columnIndex].cards[cardIndex];
-      const labelIndex = card.labels.findIndex((label) => label.id === action.label.id);
+      const labelIndex = card.labelIds.findIndex((labelId) => labelId === action.label.id);
       if (labelIndex === -1) {
-        card.labels.push(action.label);
+        card.labelIds.push(action.label.id);
       } else {
-        card.labels.splice(labelIndex, 1);
+        card.labelIds.splice(labelIndex, 1);
       }
       break;
     }
     case 'removeLabelFromAllCards': {
       draft.forEach((column) => {
         column.cards.forEach((card) => {
-          const labelIndex = card.labels.findIndex((label) => label.id === action.label.id);
+          const labelIndex = card.labelIds.findIndex((labelId) => labelId === action.label.id);
           if (labelIndex !== -1) {
-            card.labels.splice(labelIndex, 1);
+            card.labelIds.splice(labelIndex, 1);
           }
         });
       });
@@ -298,7 +298,6 @@ function getColumnById(draft: BoardColumn[], id: string): BoardColumn {
 function getBoardColumns(): BoardColumn[] {
   const boards = localStorage.getItem('boards');
   if (!boards) {
-    console.log('boards created');
     const initialBoards = getInitialBoards();
     localStorage.setItem('boards', JSON.stringify(initialBoards));
     localStorage.setItem('currentBoardId', initialBoards[0].data.id);

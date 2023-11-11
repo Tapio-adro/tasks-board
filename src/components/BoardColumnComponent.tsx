@@ -17,8 +17,9 @@ const StyledBoardColumn = styled.div`
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
   overflow: hidden;
-  min-width: 300px;
+  width: 300px;
   align-self: stretch;
+  flex: 0 0 auto;
 `;
 const BoardColumnTitle = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};

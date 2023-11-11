@@ -10,6 +10,7 @@ import { useBoardData, useBoardDataDispatch } from '../contexts/BoardDataContext
 import { Board } from '../assets/shared/types';
 import { getInitialBoardData } from '../assets/scripts/objectsGenerator';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 
 interface StyledBoardSidebarProps {
@@ -115,12 +116,6 @@ const RemoveBoardButton = styled(AddBoardButton)`
   }
 `;
 
-// interface BoardSidebarProps {
-//   column: BoardColumn;
-//   card: Card;
-//   checklistElement: ChecklistElement;
-// }
-
 const BoardSidebar: React.FC = () => {
   const boards = useBoards();
   const boardsDispatch = useBoardsDispatch();
@@ -130,22 +125,13 @@ const BoardSidebar: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   if (checklistElement.isJustCreated) {
-  //     // startEditing();
-  //     // editorRef.current?.focusEditor();
-
-  //     boardColumnsDispatch({
-  //       type: 'disableCardElementJustCreated',
-  //       boardColumn: column,
-  //       card: card,
-  //       element: checklistElement,
-  //     });
-  //   }
-  // }, [])
+  useHotkeys('p', () => {
+    if (!boards) return;
+    const board = boards[0];
+    console.log((board));
+  })
 
   function createBoard(title: string) {
-    console.log('createBoard', title);
     const board: Board = {
       data: getInitialBoardData(),
       columns: [],
@@ -169,7 +155,7 @@ const BoardSidebar: React.FC = () => {
     });
     localStorage.setItem('currentBoardId', board.data.id);
   }
-  function deleteBoard(e: MouseEvent, board: Board) {
+  function deleteBoard(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, board: Board) {
     e.stopPropagation();
     if (board.data.id === boardData?.id) return;
     boardsDispatch({
